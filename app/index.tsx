@@ -13,7 +13,7 @@ const LOGO = {
 };
 
 const SCREEN_OPTIONS = {
-  title: 'React Native Reusables',
+  title: 'Smart Volt',
   headerTransparent: true,
   headerRight: () => <ThemeToggle />,
 };
@@ -31,26 +31,27 @@ export default function Screen() {
       <Stack.Screen options={SCREEN_OPTIONS} />
       <View className="flex-1 items-center justify-center gap-8 p-4">
         <Image source={LOGO[colorScheme ?? 'light']} style={IMAGE_STYLE} resizeMode="contain" />
+        
         <View className="gap-2 p-4">
           <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
-            1. Edit <Text variant="code">app/index.tsx</Text> to get started.
-          </Text>
-          <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
-            2. Save to see your changes instantly.
+            Olá, Seja Bem-Vindo a <Text variant="code">Smart Volt </Text>
           </Text>
         </View>
+        
         <View className="flex-row gap-2">
-          <Link href="https://reactnativereusables.com" asChild>
-            <Button>
-              <Text>Browse the Docs</Text>
-            </Button>
-          </Link>
-          <Link href="https://github.com/founded-labs/react-native-reusables" asChild>
-            <Button variant="ghost">
-              <Text>Star the Repo</Text>
+          <Link href="/sign-in-form" asChild>
+            <Button variant="outline">
+              <Text>LOGIN</Text>
               <Icon as={StarIcon} />
             </Button>
           </Link>
+
+          <Link href="#" asChild>
+            <Button>
+              <Text>CADASTRE-SE</Text>
+            </Button>
+          </Link>
+          
         </View>
       </View>
     </>

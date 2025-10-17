@@ -1,4 +1,4 @@
-import { SocialConnections } from '@/components/social-connections';
+import { SocialConnections } from '@/app/social-connections';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,7 +14,7 @@ import { Text } from '@/components/ui/text';
 import * as React from 'react';
 import { Pressable, type TextInput, View } from 'react-native';
 
-export function SignInForm() {
+export default function SignInForm() {
   const passwordInputRef = React.useRef<TextInput>(null);
 
   function onEmailSubmitEditing() {
