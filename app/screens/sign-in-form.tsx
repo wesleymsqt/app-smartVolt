@@ -1,4 +1,4 @@
-import { SocialConnections } from '@/app/social-connections';
+import { SocialConnections } from '@/components/social-connections';
 import { Button } from '@/components/ui/button';
 import {
   Card,

@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useColorScheme } from 'nativewind';
 import { Image, Platform, View } from 'react-native';
-
+ 
 const SOCIAL_CONNECTION_STRATEGIES = [
   {
     type: 'oauth_apple',
@@ -20,10 +20,10 @@ const SOCIAL_CONNECTION_STRATEGIES = [
     useTint: true,
   },
 ];
-
+ 
 export function SocialConnections() {
   const { colorScheme } = useColorScheme();
-
+ 
   return (
     <View className="gap-2 sm:flex-row sm:gap-3">
       {SOCIAL_CONNECTION_STRATEGIES.map((strategy) => {
