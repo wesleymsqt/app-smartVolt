@@ -1,12 +1,6 @@
 import { SocialConnections } from '@/components/social-connections';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -27,7 +21,7 @@ export default function Register() {
 
   return (
     <View className="gap-6">
-      <Card className="border-border/0 sm:border-border shadow-none sm:shadow-sm sm:shadow-black/5">
+      <Card className="border-border/0 shadow-none sm:border-border sm:shadow-sm sm:shadow-black/5">
         <CardHeader>
           <CardTitle className="text-center text-xl sm:text-left">Crie Sua Conta</CardTitle>
           <CardDescription className="text-center sm:text-left">
@@ -37,7 +31,7 @@ export default function Register() {
 
         <CardContent className="gap-6">
           <View className="gap-6">
-<View className="gap-1.5">
+            <View className="gap-1.5">
               <Label htmlFor="fullName">Nome Completo</Label>
               <Input
                 id="fullName"
@@ -97,7 +91,7 @@ export default function Register() {
           </View>
 
           <Text className="text-center text-sm">
-            Já tem uma conta?{' '} Entrar
+            Já tem uma conta? Entrar
             {/* <Pressable
               onPress={() => {
                 // TODO: Navigate to sign in screen
@@ -105,15 +99,14 @@ export default function Register() {
               <Text className="text-sm underline underline-offset-4">Entar</Text>
             </Pressable> */}
           </Text>
-          
+
           <View className="flex-row items-center">
             <Separator className="flex-1" />
-            <Text className="text-muted-foreground px-4 text-sm">Ou</Text>
+            <Text className="px-4 text-sm text-muted-foreground">Ou</Text>
             <Separator className="flex-1" />
           </View>
-          
-          <SocialConnections />
 
+          <SocialConnections />
         </CardContent>
       </Card>
     </View>

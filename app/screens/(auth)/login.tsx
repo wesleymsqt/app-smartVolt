@@ -57,6 +57,7 @@ export default function Login() {
               <Input
                 ref={passwordInputRef}
                 id="password"
+                placeholder="*******"
                 secureTextEntry
                 returnKeyType="send"
                 onSubmitEditing={onSubmit}
@@ -75,8 +76,7 @@ export default function Login() {
             onPress={() => {
               // TODO: Navigate to forgot password screen
             }}>
-            <Text className="text-sm">Cadastrar-se?</Text>
-
+            <Text className="text-sm">Não tem uma conta? Cadastre-se</Text>
           </Button>
         </CardContent>
       </Card>
