@@ -37,6 +37,18 @@ export default function Register() {
 
         <CardContent className="gap-6">
           <View className="gap-6">
+<View className="gap-1.5">
+              <Label htmlFor="fullName">Nome Completo</Label>
+              <Input
+                id="fullName"
+                placeholder="Fulano de Tal"
+                autoCapitalize="none"
+                // onSubmitEditing={onEmailSubmitEditing}
+                returnKeyType="next"
+                submitBehavior="submit"
+              />
+            </View>
+
             <View className="gap-1.5">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -53,11 +65,26 @@ export default function Register() {
 
             <View className="gap-1.5">
               <View className="flex-row items-center">
-                <Label htmlFor="password">senha</Label>
+                <Label htmlFor="password">Senha</Label>
               </View>
               <Input
                 ref={passwordInputRef}
                 id="password"
+                placeholder="*******"
+                secureTextEntry
+                returnKeyType="send"
+                onSubmitEditing={onSubmit}
+              />
+            </View>
+
+            <View className="gap-1.5">
+              <View className="flex-row items-center">
+                <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+              </View>
+              <Input
+                ref={passwordInputRef}
+                id="confirmPassword"
+                placeholder="*******"
                 secureTextEntry
                 returnKeyType="send"
                 onSubmitEditing={onSubmit}
@@ -65,25 +92,28 @@ export default function Register() {
             </View>
 
             <Button className="w-full" onPress={onSubmit}>
-              <Text>Continue</Text>
+              <Text>ENVIAR</Text>
             </Button>
           </View>
-          
+
           <Text className="text-center text-sm">
-            Already have an account?{' '}
-            <Pressable
+            Já tem uma conta?{' '} Entrar
+            {/* <Pressable
               onPress={() => {
                 // TODO: Navigate to sign in screen
               }}>
-              <Text className="text-sm underline underline-offset-4">Sign in</Text>
-            </Pressable>
+              <Text className="text-sm underline underline-offset-4">Entar</Text>
+            </Pressable> */}
           </Text>
+          
           <View className="flex-row items-center">
             <Separator className="flex-1" />
-            <Text className="text-muted-foreground px-4 text-sm">or</Text>
+            <Text className="text-muted-foreground px-4 text-sm">Ou</Text>
             <Separator className="flex-1" />
           </View>
+          
           <SocialConnections />
+
         </CardContent>
       </Card>
     </View>
