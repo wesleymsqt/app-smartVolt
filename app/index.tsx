@@ -39,14 +39,14 @@ export default function Screen() {
         </View>
         
         <View className="flex-row gap-2">
-          <Link href="/screens/sign-in-form" asChild>
+          <Link href="/screens/login" asChild>
             <Button variant="outline">
               <Text>LOGIN</Text>
               <Icon as={StarIcon} />
             </Button>
           </Link>
 
-          <Link href="/screens/sign-up-form" asChild>
+          <Link href="/screens/register" asChild>
             <Button>
               <Text>CADASTRE-SE</Text>
             </Button>

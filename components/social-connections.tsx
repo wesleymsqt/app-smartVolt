@@ -25,7 +25,7 @@ export function SocialConnections() {
   const { colorScheme } = useColorScheme();
  
   return (
-    <View className="gap-2 sm:flex-row sm:gap-3">
+    <View className="flex-row justify-center gap-3">
       {SOCIAL_CONNECTION_STRATEGIES.map((strategy) => {
         return (
           <Button
