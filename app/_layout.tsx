@@ -6,9 +6,9 @@ import { PortalHost } from '@rn-primitives/portal';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
+import { Header } from '@/components/Header';
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
@@ -18,7 +18,20 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack />
+      <Stack
+        screenOptions={{
+          // Header padrão para todas as telas
+          header: (props) => <Header showBackButton={props.navigation.canGoBack()} />,
+        }}
+      >
+        {/* Apenas a tela index sem header */}
+        <Stack.Screen 
+          name="index" 
+          options={{ headerShown: false }} 
+        />
+        
+        {/* Todas as outras telas terão o Header automaticamente */}
+      </Stack>
       <PortalHost />
     </ThemeProvider>
   );

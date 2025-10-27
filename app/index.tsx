@@ -7,20 +7,10 @@ import { useColorScheme } from 'nativewind';
 import * as React from 'react';
 import { Image, type ImageStyle, View } from 'react-native';
 
-const LOGO = {
-  light: require('@/assets/images/react-native-reusables-light.png'),
-  dark: require('@/assets/images/react-native-reusables-dark.png'),
-};
-
 const SCREEN_OPTIONS = {
   title: 'Smart Volt',
   headerTransparent: true,
   headerRight: () => <ThemeToggle />,
-};
-
-const IMAGE_STYLE: ImageStyle = {
-  height: 76,
-  width: 76,
 };
 
 export default function Screen() {
@@ -28,9 +18,9 @@ export default function Screen() {
 
   return (
     <>
+      
       <Stack.Screen options={SCREEN_OPTIONS} />
       <View className="flex-1 items-center justify-center gap-8 p-4">
-        <Image source={LOGO[colorScheme ?? 'light']} style={IMAGE_STYLE} resizeMode="contain" />
         
         <View className="gap-2 p-4">
           <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
