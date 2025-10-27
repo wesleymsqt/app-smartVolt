@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Text } from '@/components/ui/text';
 import * as React from 'react';
 import { Pressable, type TextInput, View } from 'react-native';
+import { Link } from 'expo-router';
 
 export default function Login() {
   const passwordInputRef = React.useRef<TextInput>(null);
@@ -43,15 +44,14 @@ export default function Login() {
             <View className="gap-1.5">
               <View className="flex-row items-center">
                 <Label htmlFor="password">Senha</Label>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="ml-auto h-4 px-1 py-0 web:h-fit sm:h-4"
-                  onPress={() => {
-                    // TODO: Navigate to forgot password screen
-                  }}>
-                  <Text className="font-normal leading-4">Esqueceu a senha?</Text>
-                </Button>
+                <Link href="/screens/forgot-password" asChild>
+    <Button
+      variant="link"
+      size="sm"
+      className="ml-auto h-4 px-1 py-0 web:h-fit sm:h-4">
+      <Text className="font-normal leading-4">Esqueceu a senha?</Text>
+    </Button>
+  </Link>
               </View>
 
               <Input
