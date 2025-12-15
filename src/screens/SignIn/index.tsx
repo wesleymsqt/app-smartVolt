@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Zap, Facebook } from 'lucide-react-native';
+import { Facebook } from 'lucide-react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import { styles } from './styles';
 import { colors } from '../../theme/colors';
+import { Logo } from '../../components/Logo';
 
 export function SignIn() {
   return (
@@ -13,13 +14,13 @@ export function SignIn() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View>
           <View style={styles.header}>
-            <View style={styles.logoPlaceholder} />
-            <Text style={styles.title}>
-              Gerencie Seus Aparelhos{'\n'} na Smart Volt{' '}
-              <Zap size={24} color={colors.primary} fill="none" strokeWidth={2.5} />
-            </Text>
-          </View>
+            <View style={styles.titleContainer}>
+              <Logo width={100} height={100} color={colors.primary} />
 
+              <Text style={styles.title}>Gerencie Seus Aparelhos{'\n'} na Smart Volt</Text>
+            </View>
+          </View>
+          
           <View style={styles.divider} />
 
           <View style={styles.authContainer}>
@@ -28,12 +29,12 @@ export function SignIn() {
             <View style={styles.socialButtonsContainer}>
               <TouchableOpacity style={styles.socialButton}>
                 <Text style={styles.socialButtonText}>Google</Text>
-                <AntDesign name="google" size={18} color="black" />
+                <AntDesign name="google" size={18} color={colors.textPrimary} />
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.socialButton}>
                 <Text style={styles.socialButtonText}>Facebook</Text>
-                <Facebook size={18} color="black" />
+                <Facebook size={18} color={colors.textPrimary} />
               </TouchableOpacity>
             </View>
           </View>

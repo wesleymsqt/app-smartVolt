@@ -15,22 +15,19 @@ export const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 24,
-    marginTop: 20,
+    marginTop: 15,
   },
-  logoPlaceholder: {
-    width: 80,
-    height: 40,
-    backgroundColor: colors.muted,
-    marginBottom: 16,
-    borderRadius: 4,
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 21,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    lineHeight: 32,
+    lineHeight: 40,
     textAlign: 'center',
-  },
+    },
   divider: {
     height: 1,
     backgroundColor: colors.border,
@@ -42,7 +39,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     padding: 24,
-    borderRadius: 0,
+    borderRadius: 5,
     marginBottom: 32,
   },
   authTitle: {
