@@ -1,9 +1,11 @@
 import { StyleSheet, Platform, StatusBar } from "react-native";
+import { colors } from "../../theme/colors";
+import { fontFamily } from "../../theme/fonts";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   scrollContent: {
@@ -18,35 +20,37 @@ export const styles = StyleSheet.create({
   logoPlaceholder: {
     width: 80,
     height: 40,
-    backgroundColor: "#94a3b8",
+    backgroundColor: colors.muted,
     marginBottom: 16,
     borderRadius: 4,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#0f172a",
+    fontFamily: fontFamily.bold,
+    color: colors.textPrimary,
     lineHeight: 32,
+    textAlign: "center",
   },
   divider: {
     height: 1,
-    backgroundColor: "#0f172a",
+    backgroundColor: colors.border,
     width: "100%",
     marginBottom: 32,
   },
   authContainer: {
-    borderWidth: 1,
-    borderColor: "#0f172a",
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
     padding: 24,
     borderRadius: 0,
     marginBottom: 32,
   },
   authTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: fontFamily.semiBold,
     marginBottom: 16,
     textAlign: "center",
-    color: "#0f172a",
+    color: colors.textPrimary,
   },
   socialButtonsContainer: {
     flexDirection: "row",
@@ -59,15 +63,15 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: colors.border,
     paddingVertical: 10,
     borderRadius: 4,
     gap: 8,
   },
   socialButtonText: {
     fontSize: 14,
-    fontWeight: "500",
-    color: "#0f172a",
+    fontFamily: fontFamily.medium,
+    color: colors.textPrimary,
   },
   carouselSection: {
     marginBottom: 20,
@@ -83,34 +87,36 @@ export const styles = StyleSheet.create({
     height: 12,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#0f172a",
-    backgroundColor: "transparent",
+    borderColor: colors.textPrimary,
+    backgroundColor: colors.transparent,
   },
   activeDot: {
-    backgroundColor: "#cbd5e1",
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   footerSection: {
     alignItems: "center",
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: "#0f172a",
+    borderTopColor: colors.border,
     paddingTop: 24,
   },
   footerTitle: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#0f172a",
+    fontFamily: fontFamily.bold,
+    color: colors.textPrimary,
   },
   featureImagePlaceholder: {
     width: 180,
     height: 140,
-    backgroundColor: "#94a3b8",
+    backgroundColor: colors.muted,
     borderRadius: 4,
   },
   footerDescription: {
     textAlign: "center",
     fontSize: 14,
-    color: "#0f172a",
+    fontFamily: fontFamily.regular,
+    color: colors.textPrimary,
     lineHeight: 20,
     maxWidth: 250,
   },
