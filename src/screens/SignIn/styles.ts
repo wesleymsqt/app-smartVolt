@@ -1,17 +1,17 @@
-import { StyleSheet, Platform, StatusBar } from "react-native";
-import { colors } from "../../theme/colors";
-import { fontFamily } from "../../theme/fonts";
+import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { colors } from '../../theme/colors';
+import { fontFamily } from '../../theme/fonts';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   scrollContent: {
     flexGrow: 1,
     padding: 24,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   header: {
     marginBottom: 24,
@@ -29,12 +29,12 @@ export const styles = StyleSheet.create({
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     lineHeight: 32,
-    textAlign: "center",
+    textAlign: 'center',
   },
   divider: {
     height: 1,
     backgroundColor: colors.border,
-    width: "100%",
+    width: '100%',
     marginBottom: 32,
   },
   authContainer: {
@@ -49,19 +49,19 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fontFamily.semiBold,
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
     color: colors.textPrimary,
   },
   socialButtonsContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   socialButton: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: colors.border,
     paddingVertical: 10,
@@ -77,8 +77,8 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   carouselIndicators: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     gap: 8,
     marginBottom: 16,
   },
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   footerSection: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 12,
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -113,7 +113,7 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
   },
   footerDescription: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 14,
     fontFamily: fontFamily.regular,
     color: colors.textPrimary,
