@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Facebook } from 'lucide-react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import { styles } from './styles';
-import { colors } from '../../theme/colors';
-import { Logo } from '../../components/Logo';
+import { styles } from '@/screens/SignIn/styles';
+import { colors } from '@/theme/colors';
+import { Logo } from '@/components/Logo';
 
 export function SignIn() {
   return (
@@ -20,7 +20,7 @@ export function SignIn() {
               <Text style={styles.title}>Gerencie Seus Aparelhos{'\n'} na Smart Volt</Text>
             </View>
           </View>
-          
+
           <View style={styles.divider} />
 
           <View style={styles.authContainer}>
