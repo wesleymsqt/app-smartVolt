@@ -1,6 +1,6 @@
 import { StyleSheet, Platform, StatusBar } from 'react-native';
-import { colors } from '../../theme/colors';
-import { fontFamily } from '../../theme/fonts';
+import { colors } from '@/theme/colors';
+import { fontFamily } from '@/theme/fonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     lineHeight: 40,
     textAlign: 'center',
-    },
+  },
   divider: {
     height: 1,
     backgroundColor: colors.border,
@@ -69,52 +69,5 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontFamily.medium,
     color: colors.textPrimary,
-  },
-  carouselSection: {
-    marginBottom: 20,
-  },
-  carouselIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: 8,
-    marginBottom: 16,
-  },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.textPrimary,
-    backgroundColor: colors.transparent,
-  },
-  activeDot: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  footerSection: {
-    alignItems: 'center',
-    gap: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: 24,
-  },
-  footerTitle: {
-    fontSize: 16,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-  },
-  featureImagePlaceholder: {
-    width: 180,
-    height: 140,
-    backgroundColor: colors.muted,
-    borderRadius: 4,
-  },
-  footerDescription: {
-    textAlign: 'center',
-    fontSize: 14,
-    fontFamily: fontFamily.regular,
-    color: colors.textPrimary,
-    lineHeight: 20,
-    maxWidth: 250,
   },
 });

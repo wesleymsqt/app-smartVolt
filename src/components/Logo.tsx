@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { Path, G } from 'react-native-svg';
-import { colors } from '../theme/colors';
+import { colors } from '@/theme/colors';
 
 type Props = {
   width?: number;
@@ -9,23 +9,11 @@ type Props = {
   style?: any;
 };
 
-export function Logo({ 
-  width = 100, // Ajustei o padrão para ser retangular
-  height = 55, // Mantendo a proporção aproximada do viewBox original
-  color = colors.primary, 
-  style 
-}: Props) {
+export function Logo({ width = 100, height = 55, color = colors.primary, style }: Props) {
   return (
-    <Svg
-      width={width}
-      height={height}
-      viewBox="0 0 2816 1536" // O ViewBox deve ser igual ao do arquivo original
-      style={style}
-    >
-      {/* O Group (G) é essencial aqui para desvirar a imagem e ajustar a escala conforme o SVG original */}
+    <Svg width={width} height={height} viewBox="0 0 2816 1536" style={style}>
       <G transform="translate(0, 1536) scale(0.1, -0.1)">
         <Path
-          fill={color} // Agora usamos FILL, não Stroke
           d="M11220 15353 c-197 -15 -488 -62 -661 -107 -205 -54 -463 -152 -619
           -235 -52 -28 -121 -64 -153 -81 -32 -17 -85 -50 -119 -73 -84 -58 -272 -199
           -278 -208 -3 -4 -23 -22 -45 -39 -100 -79 -265 -252 -401 -420 -101 -125 -266

@@ -7,6 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { styles } from '@/screens/SignIn/styles';
 import { colors } from '@/theme/colors';
 import { Logo } from '@/components/Logo';
+import { FeatureCarousel } from '@/components/FeatureCarousel';
 
 export function SignIn() {
   return (
@@ -18,6 +19,7 @@ export function SignIn() {
               <Logo width={100} height={100} color={colors.primary} />
 
               <Text style={styles.title}>Gerencie Seus Aparelhos{'\n'} na Smart Volt</Text>
+              <Logo width={60} height={32} color={colors.primary} style={{ marginLeft: 16 }} />
             </View>
           </View>
 
@@ -40,23 +42,7 @@ export function SignIn() {
           </View>
         </View>
 
-        <View>
-          <View style={styles.carouselSection}>
-            <View style={styles.carouselIndicators}>
-              <View style={[styles.dot, styles.activeDot]} />
-              <View style={styles.dot} />
-              <View style={styles.dot} />
-            </View>
-          </View>
-
-          <View style={styles.footerSection}>
-            <Text style={styles.footerTitle}>Controle Total</Text>
-            <View style={styles.featureImagePlaceholder} />
-            <Text style={styles.footerDescription}>
-              Ligue e desligue seus aparelhos de{'\n'}qualquer lugar pelo celular
-            </Text>
-          </View>
-        </View>
+        <FeatureCarousel />
       </ScrollView>
     </SafeAreaView>
   );
