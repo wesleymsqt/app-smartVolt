@@ -9,8 +9,9 @@ import {
 } from '@expo-google-fonts/inter';
 import { ActivityIndicator, View } from 'react-native';
 
-import { SignIn } from './src/screens/SignIn';
-import { colors } from './src/theme/colors';
+import { SignIn } from '@/screens/SignIn';
+import { colors } from '@/theme/colors';
+import { Home } from '@/screens/Home';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -38,7 +39,8 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" backgroundColor="transparent" translucent />
-      <SignIn />
+      {/* <SignIn /> */}
+      <Home />
     </SafeAreaProvider>
   );
 }

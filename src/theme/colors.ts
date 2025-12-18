@@ -1,7 +1,7 @@
 // Color palette inspired by Color Hunt
 // https://colorhunt.co/palette/ebf4dd90ab8b5a78633b4953
 
-const palette = {
+export const palette = {
   cream: {
     50: '#F7FBF2',
     100: '#EBF4DD',
