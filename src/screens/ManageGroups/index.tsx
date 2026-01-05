@@ -24,6 +24,7 @@ export function ManageGroups() {
     setCurrentTab(tab);
     if (tab === 'home') navigation.navigate('Home');
     if (tab === 'list') navigation.navigate('ManageDevices');
+    if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
   const handleLogout = () => {

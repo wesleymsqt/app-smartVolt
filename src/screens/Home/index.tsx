@@ -27,6 +27,7 @@ export function Home() {
 
     if (tab === 'grid') navigation.navigate('ManageGroups');
     if (tab === 'list') navigation.navigate('ManageDevices');
+    if (tab === 'menu') navigation.navigate('Personalizations');
   }
 
   const toggleDevice = (device: keyof typeof devices) => {
