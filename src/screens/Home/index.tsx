@@ -22,6 +22,14 @@ export function Home() {
     navigation.navigate('SignIn');
   }
 
+  function handleTabChange(tab: TabTypes) {
+    setCurrentTab(tab);
+
+    if (tab === 'grid') {
+      navigation.navigate('ManageGroups');
+    }
+  }
+
   const toggleDevice = (device: keyof typeof devices) => {
     setDevices((prev) => ({ ...prev, [device]: !prev[device] }));
   };
@@ -89,7 +97,7 @@ export function Home() {
         </View>
       </ScrollView>
 
-      <BottomMenu activeTab={currentTab} onTabChange={setCurrentTab} />
+      <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );
 }
