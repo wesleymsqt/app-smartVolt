@@ -25,9 +25,8 @@ export function Home() {
   function handleTabChange(tab: TabTypes) {
     setCurrentTab(tab);
 
-    if (tab === 'grid') {
-      navigation.navigate('ManageGroups');
-    }
+    if (tab === 'grid') navigation.navigate('ManageGroups');
+    if (tab === 'list') navigation.navigate('ManageDevices');
   }
 
   const toggleDevice = (device: keyof typeof devices) => {

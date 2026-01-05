@@ -23,6 +23,7 @@ export function ManageGroups() {
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
     if (tab === 'home') navigation.navigate('Home');
+    if (tab === 'list') navigation.navigate('ManageDevices');
   };
 
   const handleLogout = () => {
