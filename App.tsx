@@ -9,9 +9,8 @@ import {
 } from '@expo-google-fonts/inter';
 import { ActivityIndicator, View } from 'react-native';
 
-import { SignIn } from '@/screens/SignIn';
+import { Routes } from '@/routes';
 import { colors } from '@/theme/colors';
-import { Home } from '@/screens/Home';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,14 +22,7 @@ export default function App() {
 
   if (!fontsLoaded) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: colors.background,
-        }}
-      >
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -39,8 +31,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" backgroundColor="transparent" translucent />
-      {/* <SignIn /> */}
-      <Home />
+      <Routes />
     </SafeAreaProvider>
   );
 }

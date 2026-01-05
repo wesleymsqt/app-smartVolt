@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { Facebook } from 'lucide-react-native';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -10,6 +11,12 @@ import { Logo } from '@/components/Logo';
 import { FeatureCarousel } from '@/components/FeatureCarousel';
 
 export function SignIn() {
+  const navigation = useNavigation<any>();
+
+  function handleSignIn() {
+    navigation.navigate('Home');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -29,12 +36,12 @@ export function SignIn() {
             <Text style={styles.authTitle}>Entrar/Cadastrar-se com</Text>
 
             <View style={styles.socialButtonsContainer}>
-              <TouchableOpacity style={styles.socialButton}>
+              <TouchableOpacity style={styles.socialButton} onPress={handleSignIn}>
                 <Text style={styles.socialButtonText}>Google</Text>
                 <AntDesign name="google" size={18} color={colors.textPrimary} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.socialButton}>
+              <TouchableOpacity style={styles.socialButton} onPress={handleSignIn}>
                 <Text style={styles.socialButtonText}>Facebook</Text>
                 <Facebook size={18} color={colors.textPrimary} />
               </TouchableOpacity>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { Grid, ChevronRight, ChevronDown } from 'lucide-react-native';
 
 import { styles } from './styles';
@@ -9,12 +10,17 @@ import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 
 export function Home() {
+  const navigation = useNavigation<any>();
   const [currentTab, setCurrentTab] = useState<TabTypes>('home');
   const [devices, setDevices] = useState({
     ac: true,
     lamp: true,
     tv: true,
   });
+
+  function handleLogout() {
+    navigation.navigate('SignIn');
+  }
 
   const toggleDevice = (device: keyof typeof devices) => {
     setDevices((prev) => ({ ...prev, [device]: !prev[device] }));
@@ -23,7 +29,7 @@ export function Home() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Header userName="Anderson" onLogout={() => console.log('Sair')} />
+        <Header userName="Anderson" onLogout={handleLogout} />
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Grupos de Aparelhos</Text>
