@@ -41,9 +41,10 @@ export function AddDevice() {
       <ScrollView contentContainerStyle={styles.content}>
         <Header title="Adicionar Aparelho" onLogout={handleLogout} />
 
-        <TouchableOpacity style={styles.qrButton}>
-          <Text style={styles.label}>Leitura do QR Code</Text>
-          <Camera color={colors.textPrimary} size={24} />
+        <Text style={styles.label}>Leitura do QR Code</Text>
+        <TouchableOpacity style={styles.qrButton} activeOpacity={0.7}>
+          <Text style={styles.qrText}>Toque para escanear</Text>
+          <Camera color={colors.textPrimary} size={20} />
         </TouchableOpacity>
 
         <Text style={styles.label}>Nome do Aparelho</Text>

@@ -37,18 +37,28 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 12,
+    marginBottom: 8,
   },
+
   qrButton: {
+    width: '100%',
+    height: 48,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
+    borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
     marginBottom: 24,
+    borderStyle: 'dashed',
   },
   qrText: {
-    fontSize: 16,
-    fontFamily: fontFamily.semiBold,
+    fontSize: 14,
+    fontFamily: fontFamily.regular,
     color: colors.textPrimary,
+    opacity: 0.7,
   },
 
   input: {
@@ -65,7 +75,9 @@ export const styles = StyleSheet.create({
   },
 
   groupContainer: {
-    backgroundColor: '#E8EDF2',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
     borderRadius: 4,
     padding: 16,
     marginBottom: 32,
@@ -86,7 +98,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D5DB',
+    borderBottomColor: colors.borderMuted,
   },
   radioLabel: {
     fontSize: 16,
@@ -106,9 +118,8 @@ export const styles = StyleSheet.create({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: '#8FA3A3',
+    backgroundColor: colors.textPrimary,
   },
-
   footerButtons: {
     flexDirection: 'row',
     gap: 16,
@@ -130,7 +141,7 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#94A3B8',
+    backgroundColor: colors.textPrimary,
   },
   buttonText: {
     fontFamily: fontFamily.bold,
