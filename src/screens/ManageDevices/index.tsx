@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Search, Plus, Edit3, X } from 'lucide-react-native';
@@ -10,9 +10,9 @@ import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 
 const initialDevices = [
-  { id: '1', name: 'Ar-condicionado', consumption: '3.0 kWh', isOn: true },
-  { id: '2', name: 'Lampada', consumption: '0.8 kWh', isOn: false },
-  { id: '3', name: 'Ar-condicionado', consumption: '3.0 kWh', isOn: true },
+  { id: '1', name: 'Ar-condicionado', group: 'Sala', consumption: '3.0 kWh', isOn: true },
+  { id: '2', name: 'Lampada', group: 'Cozinha', consumption: '0.8 kWh', isOn: false },
+  { id: '3', name: 'Ar-condicionado', group: 'Quarto', consumption: '3.0 kWh', isOn: true },
 ];
 
 export function ManageDevices() {
@@ -35,6 +35,17 @@ export function ManageDevices() {
 
   const toggleSwitch = (id: string) => {
     setDevices((prev) => prev.map((device) => (device.id === id ? { ...device, isOn: !device.isOn } : device)));
+  };
+
+  const handleRemoveDevice = (id: string) => {
+    setDevices((prev) => prev.filter((device) => device.id !== id));
+  };
+
+  const confirmRemove = (id: string) => {
+    Alert.alert('Remover Aparelho', 'Tem certeza que deseja remover este aparelho da lista?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Remover', style: 'destructive', onPress: () => handleRemoveDevice(id) },
+    ]);
   };
 
   return (
@@ -65,26 +76,43 @@ export function ManageDevices() {
           <View key={item.id} style={styles.card}>
             <View style={styles.cardLeftContent}>
               <Text style={styles.deviceName}>{item.name}</Text>
+              <Text style={styles.deviceGroup}>{item.group}</Text>
 
               <View style={styles.deviceStatusRow}>
-                <Text style={styles.consumptionText}>{item.consumption}</Text>
-                <Switch
-                  trackColor={{ false: colors.borderMuted, true: colors.textPrimary }}
-                  thumbColor={item.isOn ? colors.surface : colors.textPrimary}
-                  onValueChange={() => toggleSwitch(item.id)}
-                  value={item.isOn}
-                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-                />
+                <View style={styles.consumptionBadge}>
+                  <Text style={styles.consumptionText}>{item.consumption}</Text>
+                </View>
+
+                <View style={styles.switchWrapper}>
+                  <Text style={[styles.statusLabel, { color: item.isOn ? colors.textPrimary : colors.borderMuted }]}>
+                    {item.isOn ? 'ON' : 'OFF'}
+                  </Text>
+
+                  <Switch
+                    trackColor={{ false: colors.borderMuted, true: colors.textPrimary }}
+                    thumbColor={item.isOn ? colors.surface : colors.textPrimary}
+                    onValueChange={() => toggleSwitch(item.id)}
+                    value={item.isOn}
+                    style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
+                  />
+                </View>
               </View>
             </View>
 
             <View style={styles.cardRightContent}>
-              <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('EditDevice')}>
-                <Edit3 size={20} color={colors.textPrimary} />
+              <TouchableOpacity
+                style={styles.iconButton}
+                onPress={() =>
+                  navigation.navigate('EditDevice', {
+                    onDelete: () => handleRemoveDevice(item.id),
+                  })
+                }
+              >
+                <Edit3 size={18} color={colors.textPrimary} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.iconButton}>
-                <X size={20} color={colors.textPrimary} />
+              <TouchableOpacity style={styles.iconButton} onPress={() => confirmRemove(item.id)}>
+                <X size={18} color={colors.textPrimary} />
               </TouchableOpacity>
             </View>
           </View>
