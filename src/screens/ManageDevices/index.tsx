@@ -79,7 +79,7 @@ export function ManageDevices() {
               <Text style={styles.deviceGroup}>{item.group}</Text>
 
               <View style={styles.deviceStatusRow}>
-                <View style={styles.consumptionBadge}>
+                <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
                   <Text style={styles.consumptionText}>{item.consumption}</Text>
                 </View>
 
@@ -104,7 +104,11 @@ export function ManageDevices() {
                 style={styles.iconButton}
                 onPress={() =>
                   navigation.navigate('EditDevice', {
-                    onDelete: () => handleRemoveDevice(item.id),
+                    device: item,
+                    onEdit: (updatedDevice: any) => {
+                      setDevices((prev) => prev.map((d) => (d.id === updatedDevice.id ? updatedDevice : d)));
+                    },
+                    onDelete: (id: string) => handleRemoveDevice(id),
                   })
                 }
               >
