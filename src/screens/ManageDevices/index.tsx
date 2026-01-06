@@ -88,8 +88,13 @@ export function ManageDevices() {
               <Text style={styles.deviceGroup}>{item.group}</Text>
 
               <View style={styles.deviceStatusRow}>
-                <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
+                {/* <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
                   <Text style={styles.consumptionText}>{item.consumption}</Text>
+                </View> */}
+
+                {/* Mostra 0 kWh se estiver desligado */}
+                <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
+                  <Text style={styles.consumptionText}>{item.isOn ? item.consumption : '0 kWh'}</Text>
                 </View>
 
                 <View style={styles.switchWrapper}>
