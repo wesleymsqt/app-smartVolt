@@ -1,6 +1,6 @@
 import { StyleSheet, Platform, StatusBar } from 'react-native';
-import { colors } from '../../theme/colors';
-import { fontFamily } from '../../theme/fonts';
+import { colors } from '@/theme/colors';
+import { fontFamily } from '@/theme/fonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,44 +11,12 @@ export const styles = StyleSheet.create({
   content: {
     padding: 24,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  titleContainer: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.textPrimary,
-    width: '100%',
-  },
 
   label: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 12,
-  },
-  qrButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 24,
-  },
-  qrText: {
-    fontSize: 16,
-    fontFamily: fontFamily.semiBold,
-    color: colors.textPrimary,
   },
 
   input: {
@@ -65,7 +33,9 @@ export const styles = StyleSheet.create({
   },
 
   groupContainer: {
-    backgroundColor: '#E8EDF2',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
     borderRadius: 4,
     padding: 16,
     marginBottom: 32,
@@ -86,7 +56,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D5DB',
+    borderBottomColor: colors.borderMuted,
   },
   radioLabel: {
     fontSize: 16,
@@ -106,24 +76,49 @@ export const styles = StyleSheet.create({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: '#8FA3A3', 
+    backgroundColor: colors.textPrimary,
   },
 
   footerButtons: {
     gap: 12,
-    marginTop: 24,
+    marginTop: 12,
     marginBottom: 80,
   },
-  actionButton: {
+
+  buttonSave: {
     height: 48,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#94A3B8',
+    backgroundColor: colors.textSecondary,
   },
-  actionButtonText: {
+
+  buttonRemove: {
+    height: 48,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.textPrimary,
+  },
+
+  buttonCancel: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: colors.textPrimary,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+  },
+
+  buttonTextWhite: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
     color: colors.white,
+  },
+  buttonTextDark: {
+    fontFamily: fontFamily.bold,
+    fontSize: 16,
+    color: colors.textPrimary,
   },
 });

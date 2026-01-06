@@ -2,33 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { LogOut } from 'lucide-react-native';
 
 import { styles } from './styles';
-import { colors } from '@/theme/colors';
-import { Logo } from '@/components/Logo';
-import { BottomMenu } from '@/components/BottomMenu';
+import { Header } from '@/components/Header';
+import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 
 export function EditDevice() {
   const navigation = useNavigation<any>();
+  const [currentTab, setCurrentTab] = useState<TabTypes>('list');
   const [selectedGroup, setSelectedGroup] = useState<string>('Cozinha');
 
   const groups = ['Cozinha', 'Quarto', 'Nenhum'];
 
+  const handleTabChange = (tab: TabTypes) => {
+    setCurrentTab(tab);
+    if (tab === 'home') navigation.navigate('Home');
+    if (tab === 'grid') navigation.navigate('ManageGroups');
+    if (tab === 'list') navigation.navigate('ManageDevices');
+    if (tab === 'menu') navigation.navigate('Personalizations');
+  };
+
+  const handleLogout = () => {
+    navigation.navigate('SignIn');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.headerRow}>
-          <Logo width={50} height={28} color={colors.textPrimary} />
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <LogOut color={colors.textPrimary} size={24} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.titleContainer}>
-          <Text style={styles.pageTitle}>Ar-Condicionado</Text>
-          <View style={styles.divider} />
-        </View>
+        <Header title="Ar-Condicionado" onLogout={handleLogout} />
 
         <Text style={styles.label}>Novo Nome</Text>
         <TextInput style={styles.input} placeholder="Ar-Condicionado Sala" defaultValue="Ar-Condicionado Sala" />
@@ -46,21 +47,21 @@ export function EditDevice() {
         </View>
 
         <View style={styles.footerButtons}>
-          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.actionButtonText}>Salvar Mudanças</Text>
+          <TouchableOpacity style={styles.buttonSave} onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonTextWhite}>Salvar Mudanças</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton} onPress={() => {}}>
-            <Text style={styles.actionButtonText}>Remover Aparelho</Text>
+          <TouchableOpacity style={styles.buttonRemove} onPress={() => {}}>
+            <Text style={styles.buttonTextWhite}>Remover Aparelho</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.actionButtonText}>Cancelar</Text>
+          <TouchableOpacity style={styles.buttonCancel} onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonTextDark}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
-      <BottomMenu activeTab="list" onTabChange={() => {}} />
+      <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );
 }
