@@ -67,7 +67,16 @@ export function ManageDevices() {
             />
           </View>
 
-          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddDevice')}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() =>
+              navigation.navigate('AddDevice', {
+                onAdd: (newDevice: any) => {
+                  setDevices((prev) => [...prev, newDevice]);
+                },
+              })
+            }
+          >
             <Plus size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>

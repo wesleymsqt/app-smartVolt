@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
+    paddingBottom: 100,
   },
   headerRow: {
     flexDirection: 'row',
@@ -32,14 +33,12 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.textPrimary,
     width: '100%',
   },
-
   label: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 8,
   },
-
   qrButton: {
     width: '100%',
     height: 48,
@@ -60,7 +59,6 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     opacity: 0.7,
   },
-
   input: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -73,7 +71,6 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 24,
   },
-
   groupContainer: {
     backgroundColor: colors.surface,
     borderWidth: 1,
