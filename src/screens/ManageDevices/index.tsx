@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Search, Plus, LogOut, Edit3, X } from 'lucide-react-native';
+import { Search, Plus, Edit3, X } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
-import { Logo } from '@/components/Logo';
+import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 
 const initialDevices = [
@@ -40,17 +40,7 @@ export function ManageDevices() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerRow}>
-          <Logo width={50} height={28} color={colors.textPrimary} />
-          <TouchableOpacity onPress={handleLogout}>
-            <LogOut color={colors.textPrimary} size={24} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.titleContainer}>
-          <Text style={styles.pageTitle}>Gerenciar Aparelhos</Text>
-          <View style={styles.divider} />
-        </View>
+        <Header title="Gerenciar Aparelhos" onLogout={handleLogout} />
 
         <Text style={styles.sectionTitle}>Aparelhos Disponíveis</Text>
 
@@ -66,7 +56,7 @@ export function ManageDevices() {
             />
           </View>
 
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddDevice')}>
             <Plus size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
@@ -89,7 +79,7 @@ export function ManageDevices() {
             </View>
 
             <View style={styles.cardRightContent}>
-              <TouchableOpacity style={styles.iconButton}>
+              <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('EditDevice')}>
                 <Edit3 size={20} color={colors.textPrimary} />
               </TouchableOpacity>
 

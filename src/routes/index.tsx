@@ -7,6 +7,9 @@ import { ManageGroups } from '@/screens/ManageGroups';
 import { ManageDevices } from '@/screens/ManageDevices';
 import { Personalizations } from '@/screens/Personalizations';
 
+import { AddDevice } from '@/screens/AddDevice';
+import { EditDevice } from '@/screens/EditDevice';
+
 const Stack = createNativeStackNavigator();
 
 export function Routes() {
@@ -18,6 +21,9 @@ export function Routes() {
         <Stack.Screen name="ManageGroups" component={ManageGroups} />
         <Stack.Screen name="ManageDevices" component={ManageDevices} />
         <Stack.Screen name="Personalizations" component={Personalizations} />
+
+        <Stack.Screen name="AddDevice" component={AddDevice} />
+        <Stack.Screen name="EditDevice" component={EditDevice} />
       </Stack.Navigator>
     </NavigationContainer>
   );
