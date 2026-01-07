@@ -22,6 +22,7 @@ interface GroupsContextType {
   removeGroup: (id: string) => void;
   addDeviceToGroup: (groupId: string, device: Device) => void;
   removeDeviceFromGroup: (groupId: string, deviceId: string) => void;
+  updateDeviceStatus: (deviceId: string) => void;
 }
 
 const GroupsContext = createContext<GroupsContextType | undefined>(undefined);
@@ -53,39 +54,39 @@ export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
   ];
 
   const [groups, setGroups] = useState<Group[]>([
-    { 
-      id: '1', 
-      name: 'Cozinha', 
-      connected: '4/4', 
+    {
+      id: '1',
+      name: 'Cozinha',
+      connected: '4/4',
       consumption: '5.8 kWh',
       devices: [
         { id: '1', name: 'Geladeira', consumption: '2.0 kWh', isOn: true },
         { id: '2', name: 'Fogão', consumption: '1.5 kWh', isOn: false },
         { id: '3', name: 'Microondas', consumption: '1.2 kWh', isOn: true },
         { id: '4', name: 'Lava-louças', consumption: '1.1 kWh', isOn: false },
-      ]
+      ],
     },
-    { 
-      id: '2', 
-      name: 'Quarto', 
-      connected: '3/3', 
+    {
+      id: '2',
+      name: 'Quarto',
+      connected: '3/3',
       consumption: '5.8 kWh',
       devices: [
         { id: '5', name: 'Ar-condicionado', consumption: '3.0 kWh', isOn: true },
         { id: '6', name: 'Lampada', consumption: '0.8 kWh', isOn: false },
         { id: '7', name: 'Televisão', consumption: '2.0 kWh', isOn: true },
-      ]
+      ],
     },
-    { 
-      id: '3', 
-      name: 'Sala', 
-      connected: '3/5', 
+    {
+      id: '3',
+      name: 'Sala',
+      connected: '3/5',
       consumption: '5.8 kWh',
       devices: [
         { id: '8', name: 'Smart TV', consumption: '2.5 kWh', isOn: true },
         { id: '9', name: 'Som', consumption: '1.0 kWh', isOn: false },
         { id: '10', name: 'Ventilador', consumption: '0.8 kWh', isOn: true },
-      ]
+      ],
     },
   ]);
 
@@ -95,27 +96,44 @@ export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
   };
 
   const removeGroup = (id: string) => {
-    setGroups(groups.filter(group => group.id !== id));
+    setGroups(groups.filter((group) => group.id !== id));
   };
 
   const addDeviceToGroup = (groupId: string, device: Device) => {
-    setGroups(groups.map(group =>
-      group.id === groupId
-        ? { ...group, devices: [...group.devices, device] }
-        : group
-    ));
+    setGroups(
+      groups.map((group) => (group.id === groupId ? { ...group, devices: [...group.devices, device] } : group)),
+    );
   };
 
   const removeDeviceFromGroup = (groupId: string, deviceId: string) => {
-    setGroups(groups.map(group =>
-      group.id === groupId
-        ? { ...group, devices: group.devices.filter(d => d.id !== deviceId) }
-        : group
-    ));
+    setGroups(
+      groups.map((group) =>
+        group.id === groupId ? { ...group, devices: group.devices.filter((d) => d.id !== deviceId) } : group,
+      ),
+    );
+  };
+
+  const updateDeviceStatus = (deviceId: string) => {
+    setGroups((prevGroups) =>
+      prevGroups.map((group) => ({
+        ...group,
+        devices: group.devices.map((device) => (device.id === deviceId ? { ...device, isOn: !device.isOn } : device)),
+      })),
+    );
   };
 
   return (
-    <GroupsContext.Provider value={{ groups, allDevices, addGroup, removeGroup, addDeviceToGroup, removeDeviceFromGroup }}>
+    <GroupsContext.Provider
+      value={{
+        groups,
+        allDevices,
+        addGroup,
+        removeGroup,
+        addDeviceToGroup,
+        removeDeviceFromGroup,
+        updateDeviceStatus,
+      }}
+    >
       {children}
     </GroupsContext.Provider>
   );
