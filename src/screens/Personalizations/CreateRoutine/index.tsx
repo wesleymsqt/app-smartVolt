@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Save, Clock, ChevronDown, ChevronUp, CalendarDays } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/Button';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { AppModal } from '@/components/Modal';
 import { colors } from '@/theme/colors';
 
-// Tipagem básica para nossos dados mockados
 type Device = { id: string; name: string; isActive: boolean };
 type Group = { id: string; name: string; expanded: boolean; devices: Device[] };
 
 export function CreateRoutine() {
   const navigation = useNavigation<any>();
-  const [currentTab, setCurrentTab] = useState<TabTypes>('menu');
+  const route = useRoute<any>();
+  const { onSave } = route.params || {};
 
-  // Estados do Formulário
+  const [currentTab, setCurrentTab] = useState<TabTypes>('menu');
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
-  // Mock de Grupos e Dispositivos
   const [groups, setGroups] = useState<Group[]>([
     {
       id: '1',
@@ -54,6 +56,7 @@ export function CreateRoutine() {
   ]);
 
   const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+  const fullWeekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
@@ -84,8 +87,45 @@ export function CreateRoutine() {
     );
   };
 
+  const getDaysLabel = () => {
+    if (selectedDays.length === 7) return 'Todos os dias';
+    if (selectedDays.length === 0) return 'Nunca';
+    return selectedDays
+      .map((i) => fullWeekDays[Number(i)])
+      .sort((a, b) => fullWeekDays.indexOf(a) - fullWeekDays.indexOf(b))
+      .join(', ');
+  };
+
+  const getActionLabel = () => {
+    const activeDevices: string[] = [];
+    groups.forEach((g) => {
+      g.devices.forEach((d) => {
+        if (d.isActive) activeDevices.push(d.name);
+      });
+    });
+
+    if (activeDevices.length === 0) return 'Nenhuma ação';
+    if (activeDevices.length <= 2) return `Liga ${activeDevices.join(' + ')}`;
+    return `Liga ${activeDevices[0]} + ${activeDevices.length - 1} outros`;
+  };
+
   const handleSave = () => {
-    // Aqui você implementaria a lógica de salvar
+    if (!name.trim()) {
+      setErrorModalVisible(true);
+      return;
+    }
+
+    if (onSave) {
+      const newRoutine = {
+        id: new Date().getTime().toString(),
+        name,
+        time: startTime && endTime ? `${startTime} - ${endTime}` : 'Dia todo',
+        days: getDaysLabel(),
+        action: getActionLabel(),
+        isOn: true,
+      };
+      onSave(newRoutine);
+    }
     navigation.goBack();
   };
 
@@ -94,7 +134,6 @@ export function CreateRoutine() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Header title="Criar Rotina" onBack={() => navigation.goBack()} />
 
-        {/* Nome da Rotina */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Nome da Rotina</Text>
           <TextInput
@@ -106,7 +145,6 @@ export function CreateRoutine() {
           />
         </View>
 
-        {/* Seleção de Dias */}
         <View style={styles.section}>
           <View style={styles.sectionHeaderRow}>
             <CalendarDays size={20} color={colors.textSecondary} style={{ marginRight: 8 }} />
@@ -128,7 +166,6 @@ export function CreateRoutine() {
           </View>
         </View>
 
-        {/* Horários */}
         <View style={styles.section}>
           <View style={styles.sectionHeaderRow}>
             <Clock size={20} color={colors.textSecondary} style={{ marginRight: 8 }} />
@@ -163,12 +200,10 @@ export function CreateRoutine() {
           </View>
         </View>
 
-        {/* Lista de Dispositivos (Acordeão) */}
         <Text style={[styles.label, { marginTop: 8 }]}>Ações dos Dispositivos</Text>
         <View style={styles.deviceListContainer}>
           {groups.map((group, index) => (
             <View key={group.id} style={[styles.groupItem, index !== groups.length - 1 && styles.borderBottom]}>
-              {/* Cabeçalho do Grupo (Clicável para expandir) */}
               <TouchableOpacity
                 style={styles.groupHeader}
                 onPress={() => toggleGroupExpand(group.id)}
@@ -182,7 +217,6 @@ export function CreateRoutine() {
                 )}
               </TouchableOpacity>
 
-              {/* Lista de Dispositivos do Grupo (Visível se expanded) */}
               {group.expanded && (
                 <View style={styles.devicesContainer}>
                   {group.devices.map((device) => (
@@ -208,7 +242,6 @@ export function CreateRoutine() {
           ))}
         </View>
 
-        {/* Footer Buttons */}
         <View style={styles.footerButtons}>
           <View style={{ flex: 1 }}>
             <Button title="Cancelar" variant="outline" onPress={() => navigation.goBack()} />
@@ -219,6 +252,16 @@ export function CreateRoutine() {
           </View>
         </View>
       </ScrollView>
+
+      <AppModal visible={errorModalVisible} onClose={() => setErrorModalVisible(false)} title="Dados Incompletos">
+        <Text style={{ textAlign: 'center', color: '#666', marginBottom: 20 }}>
+          Por favor, dê um nome para sua rotina antes de salvar.
+        </Text>
+        <View style={{ width: '100%' }}>
+          <Button title="Entendi" variant="secondary" onPress={() => setErrorModalVisible(false)} />
+        </View>
+      </AppModal>
+
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );

@@ -12,8 +12,6 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-
-  // Inputs Comuns
   inputGroup: {
     marginBottom: 24,
   },
@@ -34,8 +32,6 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.textPrimary,
   },
-
-  // Seções (Dias e Horas)
   section: {
     marginBottom: 24,
   },
@@ -44,8 +40,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-
-  // Seletor de Dias
   daysContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -74,8 +68,6 @@ export const styles = StyleSheet.create({
   dayTextActive: {
     color: '#FFF',
   },
-
-  // Seletor de Hora
   timeRow: {
     flexDirection: 'row',
   },
@@ -97,8 +89,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.textPrimary,
   },
-
-  // Lista de Dispositivos (Accordion Container)
   deviceListContainer: {
     backgroundColor: colors.surface,
     borderRadius: 8,
@@ -114,22 +104,18 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F3F4F6',
   },
-
-  // Header do Grupo (Accordion)
   groupHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FAFAFA', // Levemente diferente para destacar
+    backgroundColor: '#FAFAFA',
   },
   groupTitle: {
     fontSize: 14,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
   },
-
-  // Área dos Dispositivos (Expanded)
   devicesContainer: {
     paddingHorizontal: 16,
     paddingBottom: 8,
@@ -157,8 +143,6 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: fontFamily.bold,
   },
-
-  // Footer Buttons
   footerButtons: {
     flexDirection: 'row',
     marginTop: 8,
