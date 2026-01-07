@@ -9,6 +9,7 @@ import { colors } from '@/theme/colors';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { AppModal } from '@/components/Modal';
+import { Button } from '@/components/Button';
 import { useGroups } from '@/context/GroupsContext';
 import type { Device } from '@/context/GroupsContext';
 
@@ -126,15 +127,19 @@ export function GroupDetails() {
         ))}
 
         <View style={styles.footerButtons}>
-          <TouchableOpacity style={styles.buttonAdd} onPress={() => setAddModalVisible(true)}>
-            <Plus size={20} color="#FFF" style={{ marginRight: 8 }} />
-            <Text style={styles.buttonTextWhite}>Adicionar Dispositivo</Text>
-          </TouchableOpacity>
+          <Button
+            title="Adicionar Dispositivo"
+            variant="secondary"
+            onPress={() => setAddModalVisible(true)}
+            icon={<Plus size={20} color="#FFF" />}
+          />
 
-          <TouchableOpacity style={styles.buttonDelete} onPress={() => setModalVisible(true)}>
-            <Trash2 size={20} color={colors.textPrimary} style={{ marginRight: 8 }} />
-            <Text style={styles.buttonTextDark}>Excluir Grupo</Text>
-          </TouchableOpacity>
+          <Button
+            title="Excluir Grupo"
+            variant="outline"
+            onPress={() => setModalVisible(true)}
+            icon={<Trash2 size={20} color={colors.textPrimary} />}
+          />
         </View>
       </ScrollView>
 
@@ -142,12 +147,13 @@ export function GroupDetails() {
         <Text style={styles.modalMessage}>Todos os aparelhos serão removidos deste grupo.</Text>
 
         <View style={styles.modalButtonsRow}>
-          <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setModalVisible(false)}>
-            <Text style={styles.buttonTextDark}>Cancelar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalButtonConfirm} onPress={handleDeleteGroup}>
-            <Text style={styles.buttonTextWhite}>Confirmar</Text>
-          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Button title="Cancelar" variant="outline" onPress={() => setModalVisible(false)} />
+          </View>
+          <View style={{ width: 12 }} />
+          <View style={{ flex: 1 }}>
+            <Button title="Confirmar" variant="secondary" onPress={handleDeleteGroup} />
+          </View>
         </View>
       </AppModal>
 
@@ -165,12 +171,9 @@ export function GroupDetails() {
           )}
         </ScrollView>
 
-        <TouchableOpacity
-          style={[styles.modalButtonCancel, { marginTop: 16, width: '100%' }]}
-          onPress={() => setAddModalVisible(false)}
-        >
-          <Text style={styles.buttonTextDark}>Fechar</Text>
-        </TouchableOpacity>
+        <View style={{ marginTop: 16, width: '100%' }}>
+          <Button title="Fechar" variant="outline" onPress={() => setAddModalVisible(false)} />
+        </View>
       </AppModal>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />

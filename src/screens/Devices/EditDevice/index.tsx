@@ -8,6 +8,7 @@ import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { AppModal } from '@/components/Modal';
+import { Button } from '@/components/Button';
 import { colors } from '@/theme/colors';
 
 export function EditDevice() {
@@ -82,27 +83,32 @@ export function EditDevice() {
         </View>
 
         <View style={styles.footerButtons}>
-          <TouchableOpacity style={styles.buttonSave} onPress={handleSave}>
-            <Save size={20} color="#FFF" style={{ marginRight: 8 }} />
-            <Text style={styles.buttonTextWhite}>Salvar Mudanças</Text>
-          </TouchableOpacity>
+          <Button
+            title="Salvar Mudanças"
+            variant="secondary"
+            onPress={handleSave}
+            icon={<Save size={20} color="#FFF" />}
+          />
 
-          <TouchableOpacity style={styles.buttonRemove} onPress={() => setDeleteModalVisible(true)}>
-            <Trash2 size={20} color={colors.textPrimary} style={{ marginRight: 8 }} />
-            <Text style={styles.buttonTextDark}>Remover Aparelho</Text>
-          </TouchableOpacity>
+          <Button
+            title="Remover Aparelho"
+            variant="outline"
+            onPress={() => setDeleteModalVisible(true)}
+            icon={<Trash2 size={20} color={colors.textPrimary} />}
+          />
         </View>
       </ScrollView>
 
       <AppModal visible={deleteModalVisible} onClose={() => setDeleteModalVisible(false)} title="Remover Aparelho">
         <Text style={styles.modalMessage}>Tem certeza que deseja remover este aparelho permanentemente?</Text>
         <View style={styles.modalButtonsRow}>
-          <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setDeleteModalVisible(false)}>
-            <Text style={styles.buttonTextDark}>Cancelar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalButtonConfirm} onPress={handleConfirmDelete}>
-            <Text style={styles.buttonTextWhite}>Remover</Text>
-          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Button title="Cancelar" variant="outline" onPress={() => setDeleteModalVisible(false)} />
+          </View>
+          <View style={{ width: 12 }} />
+          <View style={{ flex: 1 }}>
+            <Button title="Remover" variant="secondary" onPress={handleConfirmDelete} />
+          </View>
         </View>
       </AppModal>
 
