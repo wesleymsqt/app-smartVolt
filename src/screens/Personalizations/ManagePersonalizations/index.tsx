@@ -17,6 +17,12 @@ export function Personalizations() {
   const [activeTab, setActiveTab] = useState<InternalTab>('metas');
   const [searchText, setSearchText] = useState('');
 
+  const [metas, setMetas] = useState([
+    { id: '1', name: 'Meta Geral', value: '186 kWh', label: 'Consumo mensal', alert: true },
+    { id: '2', name: 'Grupo Quarto', value: '8 kWh', label: 'Consumo diário', alert: false },
+    { id: '3', name: 'Grupo Cozinha', value: '120 kWh', label: 'Consumo mensal', alert: true },
+  ]);
+
   const [routines, setRoutines] = useState([
     {
       id: '1',
@@ -44,12 +50,6 @@ export function Personalizations() {
     },
   ]);
 
-  const metas = [
-    { id: '1', name: 'Meta Geral', value: '186 kWh', label: 'Consumo mensal', alert: true },
-    { id: '2', name: 'Grupo Quarto', value: '8 kWh', label: 'Consumo diário', alert: false },
-    { id: '3', name: 'Grupo Cozinha', value: '120 kWh', label: 'Consumo mensal', alert: true },
-  ];
-
   const handleBottomTabChange = (tab: TabTypes) => {
     setCurrentMenuTab(tab);
     if (tab === 'home') navigation.navigate('Home');
@@ -60,13 +60,20 @@ export function Personalizations() {
 
   const handleCreate = () => {
     if (activeTab === 'metas') {
-      navigation.navigate('CreateGoal');
+      navigation.navigate('CreateGoal', {
+        onSave: (newGoal: any) => {
+          setMetas((prev) => [...prev, newGoal]);
+        },
+      });
     }
   };
 
   const toggleRoutine = (id: string) => {
     setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, isOn: !r.isOn } : r)));
   };
+
+  const filteredMetas = metas.filter((m) => m.name.toLowerCase().includes(searchText.toLowerCase()));
+  const filteredRoutines = routines.filter((r) => r.name.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +113,7 @@ export function Personalizations() {
         </View>
 
         {activeTab === 'metas' &&
-          metas.map((item) => (
+          filteredMetas.map((item) => (
             <View key={item.id} style={styles.card}>
               <View style={styles.cardHeader}>
                 <Text style={styles.cardTitle}>{item.name}</Text>
@@ -132,7 +139,7 @@ export function Personalizations() {
           ))}
 
         {activeTab === 'rotinas' &&
-          routines.map((item) => (
+          filteredRoutines.map((item) => (
             <View key={item.id} style={styles.card}>
               <View style={styles.cardHeader}>
                 <Text style={styles.cardTitle}>{item.name}</Text>
