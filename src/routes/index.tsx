@@ -2,10 +2,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SignIn } from '@/screens/SignIn';
-import { Home } from '@/screens/Home/ManageHome';
+import { Home } from '@/screens/Home';
 import { ManageGroups } from '@/screens/Groups/ManageGroups';
 import { ManageDevices } from '@/screens/Devices/ManageDevices';
-import { Personalizations } from '@/screens/Personalizations';
+import { Personalizations } from '@/screens/Personalizations/ManagePersonalizations';
 
 import { GroupDetails } from '@/screens/Groups/GroupDetails';
 import { CreateGroup } from '@/screens/Groups/CreateGroup';
