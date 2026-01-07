@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Switch, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { X, Plus, Trash2 } from 'lucide-react-native';
@@ -8,6 +8,7 @@ import { styles } from './styles';
 import { colors } from '@/theme/colors';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { AppModal } from '@/components/Modal';
 import { useGroups } from '@/context/GroupsContext';
 import type { Device } from '@/context/GroupsContext';
 
@@ -137,61 +138,40 @@ export function GroupDetails() {
         </View>
       </ScrollView>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Excluir "{group.name}"?</Text>
-            <Text style={styles.modalMessage}>Todos os aparelhos serão removidos deste grupo.</Text>
+      <AppModal visible={modalVisible} onClose={() => setModalVisible(false)} title={`Excluir "${group.name}"?`}>
+        <Text style={styles.modalMessage}>Todos os aparelhos serão removidos deste grupo.</Text>
 
-            <View style={styles.modalButtonsRow}>
-              <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setModalVisible(false)}>
-                <Text style={styles.buttonTextDark}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButtonConfirm} onPress={handleDeleteGroup}>
-                <Text style={styles.buttonTextWhite}>Confirmar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+        <View style={styles.modalButtonsRow}>
+          <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setModalVisible(false)}>
+            <Text style={styles.buttonTextDark}>Cancelar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalButtonConfirm} onPress={handleDeleteGroup}>
+            <Text style={styles.buttonTextWhite}>Confirmar</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
+      </AppModal>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={addModalVisible}
-        onRequestClose={() => setAddModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Adicionar ao Grupo</Text>
-            <ScrollView style={{ maxHeight: 200, width: '100%' }}>
-              {availableDevices.length === 0 ? (
-                <Text style={{ textAlign: 'center', color: '#999', marginVertical: 20 }}>
-                  Nenhum aparelho disponível.
-                </Text>
-              ) : (
-                availableDevices.map((device) => (
-                  <TouchableOpacity key={device.id} onPress={() => handleAddDevice(device)} style={styles.modalItem}>
-                    <Text style={styles.deviceTitle}>{device.name}</Text>
-                    <Text style={{ fontSize: 12, color: '#666' }}>{device.consumption}</Text>
-                  </TouchableOpacity>
-                ))
-              )}
-            </ScrollView>
-            <TouchableOpacity
-              style={[styles.modalButtonCancel, { marginTop: 16, width: '100%' }]}
-              onPress={() => setAddModalVisible(false)}
-            >
-              <Text style={styles.buttonTextDark}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <AppModal visible={addModalVisible} onClose={() => setAddModalVisible(false)} title="Adicionar ao Grupo">
+        <ScrollView style={{ maxHeight: 200, width: '100%' }}>
+          {availableDevices.length === 0 ? (
+            <Text style={{ textAlign: 'center', color: '#999', marginVertical: 20 }}>Nenhum aparelho disponível.</Text>
+          ) : (
+            availableDevices.map((device) => (
+              <TouchableOpacity key={device.id} onPress={() => handleAddDevice(device)} style={styles.modalItem}>
+                <Text style={styles.deviceTitle}>{device.name}</Text>
+                <Text style={{ fontSize: 12, color: '#666' }}>{device.consumption}</Text>
+              </TouchableOpacity>
+            ))
+          )}
+        </ScrollView>
+
+        <TouchableOpacity
+          style={[styles.modalButtonCancel, { marginTop: 16, width: '100%' }]}
+          onPress={() => setAddModalVisible(false)}
+        >
+          <Text style={styles.buttonTextDark}>Fechar</Text>
+        </TouchableOpacity>
+      </AppModal>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>

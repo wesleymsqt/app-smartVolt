@@ -12,8 +12,6 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-
-  // Informações do Topo
   infoContainer: {
     backgroundColor: colors.surface,
     padding: 16,
@@ -35,15 +33,12 @@ export const styles = StyleSheet.create({
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 12,
   },
-
-  // --- Estilo dos Cards (Padronizado com ManageDevices) ---
   card: {
     backgroundColor: colors.surface,
     borderRadius: 8,
@@ -71,7 +66,6 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 6,
   },
-  // Badge Verde
   consumptionBadge: {
     alignSelf: 'flex-start',
     backgroundColor: '#EDF5E6',
@@ -86,7 +80,6 @@ export const styles = StyleSheet.create({
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
   },
-
   cardRightContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -109,15 +102,13 @@ export const styles = StyleSheet.create({
   iconButton: {
     padding: 4,
   },
-
-  // --- Botões do Rodapé ---
   footerButtons: {
     marginTop: 24,
     gap: 12,
   },
   buttonAdd: {
     flexDirection: 'row',
-    backgroundColor: colors.textPrimary, // Botão Principal Escuro
+    backgroundColor: colors.textPrimary,
     padding: 14,
     borderRadius: 4,
     alignItems: 'center',
@@ -143,28 +134,6 @@ export const styles = StyleSheet.create({
     fontFamily: fontFamily.bold,
     fontSize: 14,
   },
-
-  // --- Modais ---
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#FFF',
-    width: '85%',
-    padding: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
   modalMessage: {
     fontSize: 14,
     color: '#666',
@@ -179,7 +148,7 @@ export const styles = StyleSheet.create({
   },
   modalButtonConfirm: {
     flex: 1,
-    backgroundColor: colors.textSecondary, // Cor de destaque ou perigo
+    backgroundColor: colors.textSecondary,
     paddingVertical: 12,
     borderRadius: 4,
     alignItems: 'center',
