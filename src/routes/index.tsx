@@ -4,14 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SignIn } from '@/screens/SignIn';
 import { Home } from '@/screens/Home';
 import { ManageGroups } from '@/screens/Groups/ManageGroups';
-import { ManageDevices } from '@/screens/ManageDevices';
+import { ManageDevices } from '@/screens/Devices/ManageDevices';
 import { Personalizations } from '@/screens/Personalizations';
 
 import { GroupDetails } from '@/screens/Groups/GroupDetails';
 import { CreateGroup } from '@/screens/Groups/CreateGroup';
 
-import { AddDevice } from '@/screens/AddDevice';
-import { EditDevice } from '@/screens/EditDevice';
+import { AddDevice } from '@/screens/Devices/AddDevice';
+import { EditDevice } from '@/screens/Devices/EditDevice';
 
 const Stack = createNativeStackNavigator();
 
