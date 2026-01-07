@@ -2,16 +2,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SignIn } from '@/screens/SignIn';
-import { Home } from '@/screens/Home/ManageHome';
+import { Home } from '@/screens/Home';
 import { ManageGroups } from '@/screens/Groups/ManageGroups';
 import { ManageDevices } from '@/screens/Devices/ManageDevices';
-import { Personalizations } from '@/screens/Personalizations';
+import { Personalizations } from '@/screens/Personalizations/ManagePersonalizations';
 
 import { GroupDetails } from '@/screens/Groups/GroupDetails';
 import { CreateGroup } from '@/screens/Groups/CreateGroup';
 
 import { AddDevice } from '@/screens/Devices/AddDevice';
 import { EditDevice } from '@/screens/Devices/EditDevice';
+
+import { CreateGoal } from '@/screens/Personalizations/CreateGoal';
+import { EditGoal } from '@/screens/Personalizations/EditGoal';
+import { CreateRoutine } from '@/screens/Personalizations/CreateRoutine';
+import { EditRoutine } from '@/screens/Personalizations/EditRoutine';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +35,11 @@ export function Routes() {
 
         <Stack.Screen name="AddDevice" component={AddDevice} />
         <Stack.Screen name="EditDevice" component={EditDevice} />
+
+        <Stack.Screen name="CreateGoal" component={CreateGoal} />
+        <Stack.Screen name="EditGoal" component={EditGoal} />
+        <Stack.Screen name="CreateRoutine" component={CreateRoutine} />
+        <Stack.Screen name="EditRoutine" component={EditRoutine} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { LayoutDashboard, Armchair, Plug2, Settings } from 'lucide-react-native';
+import { LayoutDashboard, Armchair, Plug2, SlidersHorizontal } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
@@ -42,7 +42,7 @@ export function BottomMenu({ activeTab, onTabChange }: Props) {
         style={[styles.tabButton, activeTab === 'menu' && styles.activeTab]}
         onPress={() => onTabChange('menu')}
       >
-        <Settings size={24} color={getIconColor(activeTab === 'menu')} />
+        <SlidersHorizontal size={24} color={getIconColor(activeTab === 'menu')} />
       </TouchableOpacity>
     </View>
   );
