@@ -10,15 +10,14 @@ export const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
+    paddingBottom: 100,
   },
-
   label: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 12,
   },
-
   input: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -31,7 +30,6 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 24,
   },
-
   groupContainer: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -78,47 +76,62 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: colors.textPrimary,
   },
-
   footerButtons: {
     gap: 12,
     marginTop: 12,
-    marginBottom: 80,
   },
-
   buttonSave: {
-    height: 48,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.textSecondary,
-  },
-
-  buttonRemove: {
-    height: 48,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
     backgroundColor: colors.textPrimary,
+    padding: 14,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  buttonCancel: {
-    height: 48,
+  buttonRemove: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: colors.textPrimary,
+    padding: 14,
     borderRadius: 4,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    justifyContent: 'center',
   },
-
   buttonTextWhite: {
     fontFamily: fontFamily.bold,
-    fontSize: 16,
+    fontSize: 14,
     color: colors.white,
   },
   buttonTextDark: {
     fontFamily: fontFamily.bold,
-    fontSize: 16,
+    fontSize: 14,
     color: colors.textPrimary,
+  },
+  modalMessage: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  modalButtonsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+    justifyContent: 'center',
+  },
+  modalButtonConfirm: {
+    flex: 1,
+    backgroundColor: colors.textSecondary,
+    paddingVertical: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  modalButtonCancel: {
+    flex: 1,
+    backgroundColor: '#E5E7EB',
+    paddingVertical: 12,
+    borderRadius: 4,
+    alignItems: 'center',
   },
 });

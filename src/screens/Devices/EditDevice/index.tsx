@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Trash2, Save } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { AppModal } from '@/components/Modal';
+import { colors } from '@/theme/colors';
 
 export function EditDevice() {
   const navigation = useNavigation<any>();
@@ -16,6 +19,7 @@ export function EditDevice() {
   const [currentTab, setCurrentTab] = useState<TabTypes>('list');
   const [name, setName] = useState<string>('');
   const [selectedGroup, setSelectedGroup] = useState<string>('Nenhum');
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     if (device) {
@@ -34,10 +38,6 @@ export function EditDevice() {
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
-  const handleLogout = () => {
-    navigation.navigate('SignIn');
-  };
-
   const handleSave = () => {
     if (onEdit && device) {
       onEdit({
@@ -49,31 +49,22 @@ export function EditDevice() {
     navigation.goBack();
   };
 
-  const handleRemove = () => {
-    if (!device) return;
-
-    Alert.alert('Remover Aparelho', 'Tem certeza que deseja remover este aparelho permanentemente?', [
-      {
-        text: 'Cancelar',
-        style: 'cancel',
-      },
-      {
-        text: 'Remover',
-        style: 'destructive',
-        onPress: () => {
-          if (onDelete) {
-            onDelete(device.id);
-          }
-          navigation.goBack();
-        },
-      },
-    ]);
+  const handleConfirmDelete = () => {
+    if (onDelete && device) {
+      onDelete(device.id);
+    }
+    setDeleteModalVisible(false);
+    navigation.goBack();
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Header title={name || 'Editar Dispositivo'} onLogout={handleLogout} />
+        <Header
+          title={name || 'Editar Dispositivo'}
+          onLogout={() => navigation.navigate('SignIn')}
+          onBack={() => navigation.goBack()}
+        />
 
         <Text style={styles.label}>Novo Nome</Text>
         <TextInput style={styles.input} placeholder="Nome do dispositivo" value={name} onChangeText={setName} />
@@ -92,18 +83,28 @@ export function EditDevice() {
 
         <View style={styles.footerButtons}>
           <TouchableOpacity style={styles.buttonSave} onPress={handleSave}>
+            <Save size={20} color="#FFF" style={{ marginRight: 8 }} />
             <Text style={styles.buttonTextWhite}>Salvar Mudanças</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonRemove} onPress={handleRemove}>
-            <Text style={styles.buttonTextWhite}>Remover Aparelho</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttonCancel} onPress={() => navigation.goBack()}>
-            <Text style={styles.buttonTextDark}>Cancelar</Text>
+          <TouchableOpacity style={styles.buttonRemove} onPress={() => setDeleteModalVisible(true)}>
+            <Trash2 size={20} color={colors.textPrimary} style={{ marginRight: 8 }} />
+            <Text style={styles.buttonTextDark}>Remover Aparelho</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <AppModal visible={deleteModalVisible} onClose={() => setDeleteModalVisible(false)} title="Remover Aparelho">
+        <Text style={styles.modalMessage}>Tem certeza que deseja remover este aparelho permanentemente?</Text>
+        <View style={styles.modalButtonsRow}>
+          <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setDeleteModalVisible(false)}>
+            <Text style={styles.buttonTextDark}>Cancelar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalButtonConfirm} onPress={handleConfirmDelete}>
+            <Text style={styles.buttonTextWhite}>Remover</Text>
+          </TouchableOpacity>
+        </View>
+      </AppModal>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
