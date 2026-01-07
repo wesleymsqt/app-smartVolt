@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-// Alterado: Troquei 'X' por 'Trash2' na importação
 import { Search, Plus, Edit3, Trash2 } from 'lucide-react-native';
 
 import { styles } from './styles';
@@ -137,7 +136,6 @@ export function ManageDevices() {
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.iconButton} onPress={() => confirmRemove(item.id)}>
-                {/* Alterado: Usando o componente Trash2 aqui */}
                 <Trash2 size={18} color={colors.textPrimary} />
               </TouchableOpacity>
             </View>

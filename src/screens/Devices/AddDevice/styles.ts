@@ -12,33 +12,14 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  titleContainer: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.textPrimary,
-    width: '100%',
-  },
+
   label: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 8,
   },
+
   qrButton: {
     width: '100%',
     height: 48,
@@ -59,6 +40,7 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     opacity: 0.7,
   },
+
   input: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -71,6 +53,7 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginBottom: 24,
   },
+
   groupContainer: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -89,6 +72,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 14,
   },
+
   radioRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -117,37 +101,16 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: colors.textPrimary,
   },
+
   footerButtons: {
     flexDirection: 'row',
-    gap: 16,
     marginTop: 'auto',
   },
-  buttonCancel: {
-    flex: 1,
-    height: 48,
-    borderWidth: 1,
-    borderColor: colors.textPrimary,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-  },
-  buttonSave: {
-    flex: 1,
-    height: 48,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.textPrimary,
-  },
-  buttonText: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
-    color: colors.textPrimary,
-  },
-  buttonTextWhite: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
-    color: colors.white,
+
+  modalMessage: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
   },
 });

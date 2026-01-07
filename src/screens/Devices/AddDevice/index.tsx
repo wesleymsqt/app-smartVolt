@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Camera } from 'lucide-react-native';
+import { Camera, Save } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { Button } from '@/components/Button';
+import { AppModal } from '@/components/Modal';
 import { colors } from '@/theme/colors';
 
 export function AddDevice() {
@@ -20,6 +22,8 @@ export function AddDevice() {
   const [consumption, setConsumption] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('Nenhum');
 
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
   const groups = ['Cozinha', 'Quarto', 'Nenhum'];
 
   const handleTabChange = (tab: TabTypes) => {
@@ -30,17 +34,13 @@ export function AddDevice() {
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
-  const handleLogout = () => {
-    navigation.navigate('SignIn');
-  };
-
   const handleCancel = () => {
     navigation.goBack();
   };
 
   const handleSave = () => {
     if (!name.trim()) {
-      Alert.alert('Erro', 'Por favor, informe o nome do aparelho.');
+      setErrorModalVisible(true);
       return;
     }
 
@@ -67,7 +67,11 @@ export function AddDevice() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Header title="Adicionar Aparelho" onLogout={handleLogout} />
+        <Header
+          title="Adicionar Aparelho"
+          onLogout={() => navigation.navigate('SignIn')}
+          onBack={() => navigation.goBack()}
+        />
 
         <Text style={styles.label}>Leitura do QR Code</Text>
         <TouchableOpacity style={styles.qrButton} activeOpacity={0.7}>
@@ -107,15 +111,24 @@ export function AddDevice() {
         </View>
 
         <View style={styles.footerButtons}>
-          <TouchableOpacity style={styles.buttonCancel} onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancelar</Text>
-          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Button title="Cancelar" variant="outline" onPress={handleCancel} />
+          </View>
 
-          <TouchableOpacity style={styles.buttonSave} onPress={handleSave}>
-            <Text style={styles.buttonTextWhite}>Salvar</Text>
-          </TouchableOpacity>
+          <View style={{ width: 16 }} />
+
+          <View style={{ flex: 1 }}>
+            <Button title="Salvar" variant="secondary" onPress={handleSave} icon={<Save size={20} color="#FFF" />} />
+          </View>
         </View>
       </ScrollView>
+
+      <AppModal visible={errorModalVisible} onClose={() => setErrorModalVisible(false)} title="Dados Incompletos">
+        <Text style={styles.modalMessage}>Por favor, informe o nome do aparelho para continuar.</Text>
+        <View style={{ width: '100%' }}>
+          <Button title="Entendi" variant="secondary" onPress={() => setErrorModalVisible(false)} />
+        </View>
+      </AppModal>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
