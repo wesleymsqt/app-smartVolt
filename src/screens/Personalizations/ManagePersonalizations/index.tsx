@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Search, Plus, LogOut, Edit3, Bell, BellOff } from 'lucide-react-native';
+import { Search, Plus, Edit3, Bell, BellOff } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
-import { Logo } from '@/components/Logo';
+import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 
 type InternalTab = 'metas' | 'rotinas';
@@ -55,10 +55,7 @@ export function Personalizations() {
     if (tab === 'home') navigation.navigate('Home');
     if (tab === 'grid') navigation.navigate('ManageGroups');
     if (tab === 'list') navigation.navigate('ManageDevices');
-  };
-
-  const handleLogout = () => {
-    navigation.navigate('SignIn');
+    if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
   const toggleRoutine = (id: string) => {
@@ -67,44 +64,33 @@ export function Personalizations() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContent}>
-        <View style={styles.headerRow}>
-          <Logo width={50} height={28} color={colors.textPrimary} />
-          <TouchableOpacity onPress={handleLogout}>
-            <LogOut color={colors.textPrimary} size={24} />
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Header title="Personalizações" onLogout={() => navigation.navigate('SignIn')} />
+
+        {/* Abas Superiores */}
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity
+            style={[styles.tabButton, activeTab === 'metas' && styles.activeTabButton]}
+            onPress={() => setActiveTab('metas')}
+          >
+            <Text style={[styles.tabText, activeTab === 'metas' && styles.activeTabText]}>Metas</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.tabButton, activeTab === 'rotinas' && styles.activeTabButton]}
+            onPress={() => setActiveTab('rotinas')}
+          >
+            <Text style={[styles.tabText, activeTab === 'rotinas' && styles.activeTabText]}>Rotinas</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.pageTitle}>Personalizações</Text>
-          <View style={styles.divider} />
-        </View>
-      </View>
-
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'metas' ? styles.activeTab : styles.inactiveTab]}
-          onPress={() => setActiveTab('metas')}
-        >
-          <Text style={styles.tabText}>Metas</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'rotinas' ? styles.activeTab : styles.inactiveTab]}
-          onPress={() => setActiveTab('rotinas')}
-        >
-          <Text style={styles.tabText}>Rotinas</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.contentContainer}>
         <View style={styles.searchContainer}>
           <View style={styles.inputWrapper}>
-            <Search size={20} color={colors.textPrimary} opacity={0.5} />
+            <Search size={20} color={colors.borderMuted} />
             <TextInput
               style={styles.input}
               placeholder={activeTab === 'metas' ? 'Pesquisar meta' : 'Pesquisar rotina'}
-              placeholderTextColor={colors.textPrimary}
+              placeholderTextColor={colors.borderMuted}
               value={searchText}
               onChangeText={setSearchText}
             />
@@ -114,58 +100,60 @@ export function Personalizations() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
-          {activeTab === 'metas' &&
-            metas.map((item) => (
-              <View key={item.id} style={styles.card}>
-                <View style={styles.cardHeader}>
-                  <Text style={styles.cardTitle}>{item.name}</Text>
+        {activeTab === 'metas' &&
+          metas.map((item) => (
+            <View key={item.id} style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardTitle}>{item.name}</Text>
+                <TouchableOpacity>
                   {item.alert ? (
-                    <Bell size={20} color={colors.textPrimary} />
+                    <Bell size={20} color={colors.textSecondary} fill={colors.textSecondary} />
                   ) : (
-                    <BellOff size={20} color={colors.textPrimary} />
+                    <BellOff size={20} color={colors.borderMuted} />
                   )}
-                </View>
+                </TouchableOpacity>
+              </View>
 
+              <View style={styles.metaContent}>
                 <Text style={styles.metaValue}>{item.value}</Text>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Text style={styles.metaLabel}>{item.label}</Text>
-                  <TouchableOpacity>
-                    <Edit3 size={20} color={colors.textPrimary} />
-                  </TouchableOpacity>
-                </View>
+                <Text style={styles.metaLabel}>{item.label}</Text>
               </View>
-            ))}
 
-          {activeTab === 'rotinas' &&
-            routines.map((item) => (
-              <View key={item.id} style={styles.card}>
-                <View style={styles.cardHeader}>
-                  <Text style={styles.cardTitle}>{item.name}</Text>
-                  <Switch
-                    trackColor={{ false: colors.border, true: colors.textPrimary }}
-                    thumbColor={item.isOn ? colors.surface : colors.textPrimary}
-                    onValueChange={() => toggleRoutine(item.id)}
-                    value={item.isOn}
-                    style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-                  />
-                </View>
-
-                <Text style={styles.routineTime}>{item.time}</Text>
-
-                <View style={{ alignItems: 'flex-end', marginTop: -20, marginBottom: 10 }}>
-                  <TouchableOpacity>
-                    <Edit3 size={20} color={colors.textPrimary} />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={styles.routineDays}>{item.days}</Text>
-                <Text style={styles.routineAction}>Ação: {item.action}</Text>
+              <View style={styles.cardFooter}>
+                <Text style={styles.detailsLink}>Editar Meta</Text>
+                <Edit3 size={16} color={colors.textSecondary} />
               </View>
-            ))}
-        </ScrollView>
-      </View>
+            </View>
+          ))}
+
+        {activeTab === 'rotinas' &&
+          routines.map((item) => (
+            <View key={item.id} style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardTitle}>{item.name}</Text>
+                <Switch
+                  trackColor={{ false: colors.borderMuted, true: colors.textSecondary }}
+                  thumbColor={colors.surface}
+                  onValueChange={() => toggleRoutine(item.id)}
+                  value={item.isOn}
+                />
+              </View>
+
+              <Text style={styles.routineTime}>{item.time}</Text>
+              <Text style={styles.routineDays}>{item.days}</Text>
+
+              <View style={styles.divider} />
+
+              <Text style={styles.routineActionLabel}>Ação:</Text>
+              <Text style={styles.routineAction}>{item.action}</Text>
+
+              <View style={[styles.cardFooter, { marginTop: 12 }]}>
+                <Text style={styles.detailsLink}>Editar Rotina</Text>
+                <Edit3 size={16} color={colors.textSecondary} />
+              </View>
+            </View>
+          ))}
+      </ScrollView>
 
       <BottomMenu activeTab={currentMenuTab} onTabChange={handleBottomTabChange} />
     </SafeAreaView>

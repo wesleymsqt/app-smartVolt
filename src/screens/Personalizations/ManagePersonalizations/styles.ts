@@ -8,82 +8,52 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background,
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  headerContent: {
-    paddingHorizontal: 24,
-    paddingTop: 24,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  titleContainer: {
-    marginBottom: 24,
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.textPrimary,
-    width: '100%',
+  content: {
+    padding: 24,
+    paddingBottom: 100,
   },
 
   tabsContainer: {
     flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 8,
+    marginBottom: 24,
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    padding: 4,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
   },
   tabButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    borderRadius: 6,
   },
-  activeTab: {
-    backgroundColor: colors.borderMuted,
-  },
-  inactiveTab: {
-    backgroundColor: colors.border,
-    opacity: 0.2,
+  activeTabButton: {
+    backgroundColor: colors.textSecondary,
   },
   tabText: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
+    fontFamily: fontFamily.regular,
+    fontSize: 14,
     color: colors.textPrimary,
   },
-
-  contentContainer: {
-    flex: 1,
-    backgroundColor: colors.borderMuted,
-
-    marginHorizontal: 24,
-    marginBottom: 100,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-
-    paddingHorizontal: 24,
-    paddingTop: 24,
+  activeTabText: {
+    fontFamily: fontFamily.bold,
+    color: '#FFF',
   },
 
   searchContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
     gap: 12,
+    marginBottom: 24,
   },
   inputWrapper: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
     borderRadius: 4,
     paddingHorizontal: 12,
     height: 48,
@@ -100,7 +70,7 @@ export const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderMuted,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
@@ -108,21 +78,17 @@ export const styles = StyleSheet.create({
 
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
   },
-
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
+    alignItems: 'center',
+    marginBottom: 12,
   },
   cardTitle: {
     fontSize: 16,
@@ -130,37 +96,65 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
 
+  // Meta Specific Styles
+  metaContent: {
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
   metaValue: {
-    fontSize: 18,
+    fontSize: 24,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    textAlign: 'center',
-    marginVertical: 4,
+    marginBottom: 4,
   },
   metaLabel: {
     fontSize: 12,
     fontFamily: fontFamily.regular,
-    color: colors.textPrimary,
-    opacity: 0.7,
+    color: '#666',
   },
 
   routineTime: {
-    fontSize: 14,
+    fontSize: 18,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 8,
-    marginTop: 4,
-    textAlign: 'center',
+    marginBottom: 4,
   },
   routineDays: {
     fontSize: 12,
     fontFamily: fontFamily.regular,
-    color: colors.textPrimary,
-    marginBottom: 4,
+    color: '#666',
+    marginBottom: 12,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#F3F4F6',
+    marginVertical: 12,
+  },
+  routineActionLabel: {
+    fontSize: 12,
+    fontFamily: fontFamily.bold,
+    color: colors.textSecondary,
+    marginBottom: 2,
   },
   routineAction: {
-    fontSize: 13,
-    fontFamily: fontFamily.bold,
+    fontSize: 14,
+    fontFamily: fontFamily.regular,
     color: colors.textPrimary,
+  },
+
+  cardFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
+    paddingTop: 12,
+  },
+  detailsLink: {
+    fontSize: 12,
+    fontFamily: fontFamily.bold,
+    color: colors.textSecondary,
+    marginRight: 4,
   },
 });
