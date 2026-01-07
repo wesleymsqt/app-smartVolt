@@ -72,22 +72,51 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+
+  cardLeftContent: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
   cardTitle: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    fontFamily: fontFamily.semiBold,
-    color: colors.textPrimary,
     marginBottom: 4,
   },
-  cardFooter: {
+  cardSubtitle: {
     fontSize: 12,
     fontFamily: fontFamily.regular,
     color: colors.textPrimary,
-    opacity: 0.8,
+    opacity: 0.6,
+    marginBottom: 12,
+  },
+
+  consumptionBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#EDF5E6',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#C3DBC0',
+  },
+  consumptionText: {
+    fontSize: 13,
+    fontFamily: fontFamily.bold,
+    color: colors.textPrimary,
+  },
+
+  cardRightContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  verticalDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: colors.borderMuted,
+    marginRight: 12,
+    marginLeft: 8,
   },
 });

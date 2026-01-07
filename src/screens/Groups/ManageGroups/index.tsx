@@ -55,14 +55,22 @@ export function ManageGroups() {
           <TouchableOpacity
             key={item.id}
             style={styles.card}
+            activeOpacity={0.7}
             onPress={() => navigation.navigate('GroupDetails', { groupId: item.id })}
           >
-            <View>
+            <View style={styles.cardLeftContent}>
               <Text style={styles.cardTitle}>{item.name}</Text>
               <Text style={styles.cardSubtitle}>{item.connected} Aparelhos Conectados</Text>
-              <Text style={styles.cardFooter}>Consumo Total: {item.consumption}</Text>
+
+              <View style={styles.consumptionBadge}>
+                <Text style={styles.consumptionText}>{item.consumption}</Text>
+              </View>
             </View>
-            <ChevronRight size={20} color={colors.textPrimary} />
+
+            <View style={styles.cardRightContent}>
+              <View style={styles.verticalDivider} />
+              <ChevronRight size={24} color={colors.textPrimary} />
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
