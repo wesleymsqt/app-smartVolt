@@ -65,6 +65,12 @@ export function Personalizations() {
           setMetas((prev) => [...prev, newGoal]);
         },
       });
+    } else if (activeTab === 'rotinas') {
+      navigation.navigate('CreateRoutine', {
+        onSave: (newRoutine: any) => {
+          setRoutines((prev) => [...prev, newRoutine]);
+        },
+      });
     }
   };
 
