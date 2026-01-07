@@ -68,6 +68,18 @@ export function Personalizations() {
     }
   };
 
+  const handleEdit = (goal: any) => {
+    navigation.navigate('EditGoal', {
+      goal,
+      onEdit: (updatedGoal: any) => {
+        setMetas((prev) => prev.map((m) => (m.id === updatedGoal.id ? updatedGoal : m)));
+      },
+      onDelete: (goalId: string) => {
+        setMetas((prev) => prev.filter((m) => m.id !== goalId));
+      },
+    });
+  };
+
   const toggleRoutine = (id: string) => {
     setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, isOn: !r.isOn } : r)));
   };
@@ -131,10 +143,10 @@ export function Personalizations() {
                 <Text style={styles.metaLabel}>{item.label}</Text>
               </View>
 
-              <View style={styles.cardFooter}>
+              <TouchableOpacity style={styles.cardFooter} onPress={() => handleEdit(item)}>
                 <Text style={styles.detailsLink}>Editar Meta</Text>
                 <Edit3 size={16} color={colors.textSecondary} />
-              </View>
+              </TouchableOpacity>
             </View>
           ))}
 

@@ -14,6 +14,7 @@ import { AddDevice } from '@/screens/Devices/AddDevice';
 import { EditDevice } from '@/screens/Devices/EditDevice';
 
 import { CreateGoal } from '@/screens/Personalizations/CreateGoal';
+import { EditGoal } from '@/screens/Personalizations/EditGoal';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export function Routes() {
         <Stack.Screen name="EditDevice" component={EditDevice} />
 
         <Stack.Screen name="CreateGoal" component={CreateGoal} />
+        <Stack.Screen name="EditGoal" component={EditGoal} />
       </Stack.Navigator>
     </NavigationContainer>
   );
