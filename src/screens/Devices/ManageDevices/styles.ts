@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -34,14 +33,12 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.textPrimary,
     width: '100%',
   },
-
   sectionTitle: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 12,
   },
-
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -76,7 +73,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   card: {
     backgroundColor: colors.surface,
     borderRadius: 8,
@@ -87,40 +83,74 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
   cardLeftContent: {
     flex: 1,
     justifyContent: 'center',
+    marginRight: 8,
   },
   deviceName: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 8,
+    marginBottom: 2,
+  },
+  deviceGroup: {
+    fontSize: 12,
+    fontFamily: fontFamily.regular,
+    color: colors.textPrimary,
+    opacity: 0.6,
+    marginBottom: 12,
   },
   deviceStatusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
+    paddingRight: 8,
+  },
+  consumptionBadge: {
+    backgroundColor: colors.background,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.borderMuted,
   },
   consumptionText: {
-    fontSize: 14,
-    fontFamily: fontFamily.semiBold,
+    fontSize: 13,
+    fontFamily: fontFamily.bold,
     color: colors.textPrimary,
   },
-
-  cardRightContent: {
+  switchWrapper: {
     flexDirection: 'row',
-    gap: 12,
     alignItems: 'center',
+    gap: 8,
+  },
+  statusLabel: {
+    fontSize: 12,
+    fontFamily: fontFamily.bold,
+  },
+  cardRightContent: {
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'center',
+    paddingLeft: 12,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.borderMuted,
   },
   iconButton: {
     width: 36,
     height: 36,
     borderWidth: 1.5,
     borderColor: colors.textPrimary,
-    borderRadius: 4,
+    borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.surface,
   },
 });

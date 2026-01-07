@@ -12,28 +12,6 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-  
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  titleContainer: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.textPrimary,
-    width: '100%',
-  },
 
   sectionTitle: {
     fontSize: 16,
@@ -71,7 +49,7 @@ export const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border, 
+    borderColor: colors.border,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
@@ -87,29 +65,58 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
   },
+
+  cardLeftContent: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
   cardTitle: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    fontFamily: fontFamily.semiBold,
-    color: colors.textPrimary,
     marginBottom: 4,
   },
-  cardFooter: {
+  cardSubtitle: {
     fontSize: 12,
     fontFamily: fontFamily.regular,
     color: colors.textPrimary,
-    opacity: 0.8,
+    opacity: 0.6,
+    marginBottom: 12,
+  },
+
+  consumptionBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#EDF5E6',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#C3DBC0',
+  },
+  consumptionText: {
+    fontSize: 13,
+    fontFamily: fontFamily.bold,
+    color: colors.textPrimary,
+  },
+
+  cardRightContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  verticalDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: colors.borderMuted,
+    marginRight: 12,
+    marginLeft: 8,
   },
 });

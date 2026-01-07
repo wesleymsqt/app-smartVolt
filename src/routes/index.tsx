@@ -4,12 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SignIn } from '@/screens/SignIn';
 import { Home } from '@/screens/Home';
 import { ManageGroups } from '@/screens/Groups/ManageGroups';
-import { ManageDevices } from '@/screens/ManageDevices';
+import { ManageDevices } from '@/screens/Devices/ManageDevices';
 import { Personalizations } from '@/screens/Personalizations';
 
-// --- NOVOS IMPORTS ---
 import { GroupDetails } from '@/screens/Groups/GroupDetails';
 import { CreateGroup } from '@/screens/Groups/CreateGroup';
+
+import { AddDevice } from '@/screens/Devices/AddDevice';
+import { EditDevice } from '@/screens/Devices/EditDevice';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,10 +25,11 @@ export function Routes() {
         <Stack.Screen name="ManageDevices" component={ManageDevices} />
         <Stack.Screen name="Personalizations" component={Personalizations} />
 
-        {/* --- NOVAS ROTAS ADICIONADAS --- */}
         <Stack.Screen name="GroupDetails" component={GroupDetails} />
         <Stack.Screen name="CreateGroup" component={CreateGroup} />
-        
+
+        <Stack.Screen name="AddDevice" component={AddDevice} />
+        <Stack.Screen name="EditDevice" component={EditDevice} />
       </Stack.Navigator>
     </NavigationContainer>
   );

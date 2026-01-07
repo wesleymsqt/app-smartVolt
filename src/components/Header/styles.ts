@@ -13,16 +13,26 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  greetingContainer: {
-    alignItems: 'center',
+
+  contentContainer: {
     gap: 8,
   },
+
   greetingText: {
     fontSize: 20,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    textAlign: 'center',
+    textAlign: 'left',
   },
+
+  pageTitle: {
+    fontSize: 20,
+    fontFamily: fontFamily.bold,
+    color: colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+
   divider: {
     height: 1,
     backgroundColor: colors.textPrimary,

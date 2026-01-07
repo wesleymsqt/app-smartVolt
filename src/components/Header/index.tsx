@@ -8,10 +8,11 @@ import { Logo } from '@/components/Logo';
 
 type Props = {
   userName?: string;
+  title?: string;
   onLogout?: () => void;
 };
 
-export function Header({ userName = 'Anderson', onLogout }: Props) {
+export function Header({ userName = 'Anderson', title, onLogout }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
@@ -22,8 +23,13 @@ export function Header({ userName = 'Anderson', onLogout }: Props) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.greetingContainer}>
-        <Text style={styles.greetingText}>Seja Bem-Vindo, {userName}</Text>
+      <View style={styles.contentContainer}>
+        {title ? (
+          <Text style={styles.pageTitle}>{title}</Text>
+        ) : (
+          <Text style={styles.greetingText}>Seja Bem-Vindo, {userName}</Text>
+        )}
+
         <View style={styles.divider} />
       </View>
     </View>

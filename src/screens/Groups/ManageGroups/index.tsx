@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Search, Plus, ChevronRight, LogOut } from 'lucide-react-native';
+import { Search, Plus, ChevronRight } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
-import { Logo } from '@/components/Logo';
+import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { useGroups } from '@/context/GroupsContext';
 
@@ -30,17 +30,7 @@ export function ManageGroups() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerRow}>
-          <Logo width={50} height={28} color={colors.textPrimary} />
-          <TouchableOpacity onPress={handleLogout}>
-            <LogOut color={colors.textPrimary} size={24} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.titleContainer}>
-          <Text style={styles.pageTitle}>Gerenciar Grupos</Text>
-          <View style={styles.divider} />
-        </View>
+        <Header title="Gerenciar Grupos" onLogout={handleLogout} />
 
         <Text style={styles.sectionTitle}>Grupos Disponíveis</Text>
 
@@ -56,26 +46,31 @@ export function ManageGroups() {
             />
           </View>
 
-          <TouchableOpacity 
-            style={styles.addButton}
-            onPress={() => navigation.navigate('CreateGroup')} 
-          >
+          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('CreateGroup')}>
             <Plus size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
 
         {groups.map((item) => (
-          <TouchableOpacity 
-            key={item.id} 
+          <TouchableOpacity
+            key={item.id}
             style={styles.card}
+            activeOpacity={0.7}
             onPress={() => navigation.navigate('GroupDetails', { groupId: item.id })}
           >
-            <View>
+            <View style={styles.cardLeftContent}>
               <Text style={styles.cardTitle}>{item.name}</Text>
               <Text style={styles.cardSubtitle}>{item.connected} Aparelhos Conectados</Text>
-              <Text style={styles.cardFooter}>Consumo Total: {item.consumption}</Text>
+
+              <View style={styles.consumptionBadge}>
+                <Text style={styles.consumptionText}>{item.consumption}</Text>
+              </View>
             </View>
-            <ChevronRight size={20} color={colors.textPrimary} />
+
+            <View style={styles.cardRightContent}>
+              <View style={styles.verticalDivider} />
+              <ChevronRight size={24} color={colors.textPrimary} />
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
