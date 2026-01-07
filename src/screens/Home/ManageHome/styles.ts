@@ -116,12 +116,30 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.textSecondary,
   },
+
+  groupMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   groupCardStatus: {
     fontSize: 14,
     color: '#666',
     fontFamily: fontFamily.regular,
-    marginBottom: 16,
   },
+  dotSeparator: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#CCC',
+    marginHorizontal: 8,
+  },
+  groupCardConsumption: {
+    fontSize: 14,
+    color: colors.textPrimary,
+    fontFamily: fontFamily.bold,
+  },
+
   groupCardFooter: {
     flexDirection: 'row',
     alignItems: 'center',

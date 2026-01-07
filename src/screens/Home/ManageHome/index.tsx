@@ -52,9 +52,20 @@ export function Home() {
     };
   }, [groups]);
 
-  const getGroupSummary = (groupDevices: any[]) => {
+  const getGroupStats = (groupDevices: any[]) => {
     const active = groupDevices.filter((d) => d.isOn).length;
-    return `${active}/${groupDevices.length} Ligados`;
+
+    const consumption = groupDevices
+      .filter((d) => d.isOn)
+      .reduce((acc, d) => {
+        const value = parseFloat(d.consumption.replace(/[^0-9.]/g, '')) || 0;
+        return acc + value;
+      }, 0);
+
+    return {
+      countText: `${active}/${groupDevices.length} Ligados`,
+      consumptionText: `${consumption.toFixed(1)} kWh`,
+    };
   };
 
   return (
@@ -93,23 +104,31 @@ export function Home() {
               </TouchableOpacity>
             </View>
           ) : (
-            groups.map((group) => (
-              <TouchableOpacity key={group.id} style={styles.groupCard} onPress={() => handleGroupDetails(group.id)}>
-                <View style={styles.groupCardHeader}>
-                  <Text style={styles.groupCardTitle} numberOfLines={1}>
-                    {group.name}
-                  </Text>
-                  {group.devices.some((d) => d.isOn) && <View style={styles.activeDot} />}
-                </View>
+            groups.map((group) => {
+              const stats = getGroupStats(group.devices);
 
-                <Text style={styles.groupCardStatus}>{getGroupSummary(group.devices)}</Text>
+              return (
+                <TouchableOpacity key={group.id} style={styles.groupCard} onPress={() => handleGroupDetails(group.id)}>
+                  <View style={styles.groupCardHeader}>
+                    <Text style={styles.groupCardTitle} numberOfLines={1}>
+                      {group.name}
+                    </Text>
+                    {group.devices.some((d) => d.isOn) && <View style={styles.activeDot} />}
+                  </View>
 
-                <View style={styles.groupCardFooter}>
-                  <Text style={styles.detailsLink}>Detalhes</Text>
-                  <ChevronRight size={16} color={colors.textSecondary} />
-                </View>
-              </TouchableOpacity>
-            ))
+                  <View style={styles.groupMetaRow}>
+                    <Text style={styles.groupCardStatus}>{stats.countText}</Text>
+                    <View style={styles.dotSeparator} />
+                    <Text style={styles.groupCardConsumption}>{stats.consumptionText}</Text>
+                  </View>
+
+                  <View style={styles.groupCardFooter}>
+                    <Text style={styles.detailsLink}>Detalhes</Text>
+                    <ChevronRight size={16} color={colors.textSecondary} />
+                  </View>
+                </TouchableOpacity>
+              );
+            })
           )}
         </View>
       </ScrollView>
