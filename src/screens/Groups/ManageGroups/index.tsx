@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Search, Plus, ChevronRight, LogOut } from 'lucide-react-native';
@@ -8,15 +8,11 @@ import { styles } from './styles';
 import { colors } from '@/theme/colors';
 import { Logo } from '@/components/Logo';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
-
-const groupsData = [
-  { id: '1', name: 'Cozinha', connected: '4/4', consumption: '5.8 kWh' },
-  { id: '2', name: 'Quarto', connected: '3/3', consumption: '5.8 kWh' },
-  { id: '3', name: 'Sala', connected: '3/5', consumption: '5.8 kWh' },
-];
+import { useGroups } from '@/context/GroupsContext';
 
 export function ManageGroups() {
   const navigation = useNavigation<any>();
+  const { groups } = useGroups();
   const [currentTab, setCurrentTab] = useState<TabTypes>('grid');
   const [searchText, setSearchText] = useState('');
 
@@ -60,13 +56,20 @@ export function ManageGroups() {
             />
           </View>
 
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity 
+            style={styles.addButton}
+            onPress={() => navigation.navigate('CreateGroup')} 
+          >
             <Plus size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
 
-        {groupsData.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.card}>
+        {groups.map((item) => (
+          <TouchableOpacity 
+            key={item.id} 
+            style={styles.card}
+            onPress={() => navigation.navigate('GroupDetails', { groupId: item.id })}
+          >
             <View>
               <Text style={styles.cardTitle}>{item.name}</Text>
               <Text style={styles.cardSubtitle}>{item.connected} Aparelhos Conectados</Text>
