@@ -12,19 +12,16 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
-    marginBottom: 12,
+    marginBottom: 16,
   },
-
   searchContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
     gap: 12,
+    marginBottom: 24,
   },
   inputWrapper: {
     flex: 1,
@@ -49,74 +46,59 @@ export const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderMuted,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   card: {
     backgroundColor: colors.surface,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.borderMuted,
     padding: 16,
-    marginBottom: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
+    shadowRadius: 3,
     elevation: 2,
   },
-
-  cardLeftContent: {
-    flex: 1,
-    justifyContent: 'center',
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-
-  cardTitle: {
+  groupName: {
     fontSize: 16,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
     marginBottom: 4,
   },
-  cardSubtitle: {
+  groupStatus: {
     fontSize: 12,
     fontFamily: fontFamily.regular,
-    color: colors.textPrimary,
-    opacity: 0.6,
-    marginBottom: 12,
+    color: '#666',
+    marginBottom: 8,
   },
-
   consumptionBadge: {
     alignSelf: 'flex-start',
     backgroundColor: '#EDF5E6',
     paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: '#C3DBC0',
   },
   consumptionText: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: fontFamily.bold,
     color: colors.textPrimary,
   },
-
-  cardRightContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
   verticalDivider: {
     width: 1,
     height: 40,
     backgroundColor: colors.borderMuted,
-    marginRight: 12,
-    marginLeft: 8,
+    marginHorizontal: 16,
   },
 });

@@ -9,6 +9,7 @@ import { colors } from '@/theme/colors';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { useGroups } from '@/context/GroupsContext';
+import type { Group } from '@/context/GroupsContext';
 
 export function ManageGroups() {
   const navigation = useNavigation<any>();
@@ -19,18 +20,40 @@ export function ManageGroups() {
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
     if (tab === 'home') navigation.navigate('Home');
+    if (tab === 'grid') navigation.navigate('ManageGroups');
     if (tab === 'list') navigation.navigate('ManageDevices');
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
-  const handleLogout = () => {
-    navigation.navigate('SignIn');
+  const handleGroupDetails = (groupId: string) => {
+    navigation.navigate('GroupDetails', { groupId });
   };
+
+  const getGroupStats = (group: Group) => {
+    const devices = group.devices || [];
+    const totalCount = devices.length;
+    const activeCount = devices.filter((d) => d.isOn).length;
+
+    const totalConsumption = devices
+      .filter((d) => d.isOn)
+      .reduce((acc, d) => {
+        const value = parseFloat(d.consumption.replace(/[^0-9.]/g, '')) || 0;
+        return acc + value;
+      }, 0);
+
+    return {
+      statusText: `${activeCount}/${totalCount} Aparelhos Ligados`,
+      consumptionText: `${totalConsumption.toFixed(1)} kWh`,
+      isActive: activeCount > 0,
+    };
+  };
+
+  const filteredGroups = groups.filter((g) => g.name.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Header title="Gerenciar Grupos" onLogout={handleLogout} />
+        <Header title="Gerenciar Grupos" onLogout={() => navigation.navigate('SignIn')} />
 
         <Text style={styles.sectionTitle}>Grupos Disponíveis</Text>
 
@@ -51,28 +74,29 @@ export function ManageGroups() {
           </TouchableOpacity>
         </View>
 
-        {groups.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.card}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('GroupDetails', { groupId: item.id })}
-          >
-            <View style={styles.cardLeftContent}>
-              <Text style={styles.cardTitle}>{item.name}</Text>
-              <Text style={styles.cardSubtitle}>{item.connected} Aparelhos Conectados</Text>
+        {filteredGroups.map((group) => {
+          const stats = getGroupStats(group);
 
-              <View style={styles.consumptionBadge}>
-                <Text style={styles.consumptionText}>{item.consumption}</Text>
+          return (
+            <TouchableOpacity key={group.id} style={styles.card} onPress={() => handleGroupDetails(group.id)}>
+              <View style={styles.cardContent}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.groupName}>{group.name}</Text>
+                  <Text style={styles.groupStatus}>{stats.statusText}</Text>
+
+                  <View style={[styles.consumptionBadge, { opacity: stats.isActive ? 1 : 0.5 }]}>
+                    <Text style={styles.consumptionText}>{stats.consumptionText}</Text>
+                  </View>
+                </View>
+
+                {/* --- AQUI ESTÁ A LINHA DE VOLTA --- */}
+                <View style={styles.verticalDivider} />
+
+                <ChevronRight size={24} color={colors.textPrimary} />
               </View>
-            </View>
-
-            <View style={styles.cardRightContent}>
-              <View style={styles.verticalDivider} />
-              <ChevronRight size={24} color={colors.textPrimary} />
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />

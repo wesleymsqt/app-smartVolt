@@ -2,31 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { LogOut } from 'lucide-react-native';
+import { Save } from 'lucide-react-native';
 
 import { styles } from './styles';
-import { colors } from '@/theme/colors';
-import { Logo } from '@/components/Logo';
+import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { Button } from '@/components/Button';
+import { AppModal } from '@/components/Modal';
 import { useGroups } from '@/context/GroupsContext';
-
-const availableDevices = [
-    { id: '1', name: 'Ar-condicionado', consumption: '3.5 kWh' },
-    { id: '2', name: 'Lampada do Teto', consumption: '0.8 kWh' },
-    { id: '3', name: 'Smart TV', consumption: '2.0 kWh' },
-];
 
 export function CreateGroup() {
   const navigation = useNavigation<any>();
-  const { addGroup } = useGroups();
+  const { addGroup, allDevices } = useGroups();
+
   const [groupName, setGroupName] = useState('');
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [currentTab, setCurrentTab] = useState<TabTypes>('grid');
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   const handleSelectDevice = (id: string) => {
-    setSelectedDevices(prev =>
-      prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
-    );
+    setSelectedDevices((prev) => (prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]));
   };
 
   const handleTabChange = (tab: TabTypes) => {
@@ -37,82 +32,99 @@ export function CreateGroup() {
   };
 
   const handleCreateGroup = () => {
-    if (groupName.trim() && selectedDevices.length > 0) {
-      const devices = selectedDevices.map(id => {
-        const dev = availableDevices.find(d => d.id === id);
-        return {
-          id,
-          name: dev?.name || '',
-          consumption: dev?.consumption || '0.0 kWh',
-          isOn: false
-        };
-      });
-      const totalConsumption = devices.reduce((sum, dev) => {
-        const value = parseFloat(dev.consumption.replace(' kWh', ''));
-        return sum + value;
-      }, 0).toFixed(1) + ' kWh';
-      addGroup({
-        name: groupName,
-        connected: `${selectedDevices.length}/${availableDevices.length}`,
-        consumption: totalConsumption,
-        devices
-      });
-      navigation.goBack();
+    if (!groupName.trim()) {
+      setErrorModalVisible(true);
+      return;
     }
+
+    const devicesToAdd = allDevices
+      .filter((d) => selectedDevices.includes(d.id))
+      .map((d) => ({
+        ...d,
+        isOn: false,
+      }));
+
+    const totalConsumption =
+      devicesToAdd
+        .reduce((sum, dev) => {
+          const value = parseFloat(dev.consumption.replace(/[^0-9.]/g, '')) || 0;
+          return sum + value;
+        }, 0)
+        .toFixed(1) + ' kWh';
+
+    addGroup({
+      name: groupName,
+      connected: `${devicesToAdd.length}/${devicesToAdd.length}`,
+      consumption: totalConsumption,
+      devices: devicesToAdd,
+    });
+
+    navigation.goBack();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        
-        <View style={styles.headerRow}>
-          <Logo width={50} height={28} color={colors.textPrimary} />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <LogOut color={colors.textPrimary} size={24} style={{transform: [{ rotate: '180deg' }]}} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.titleContainer}>
-          <Text style={styles.pageTitle}>Criar Novo Grupo</Text>
-          <View style={styles.divider} />
-        </View>
-
-        <Text style={styles.label}>Nome do Grupo</Text>
-        <TextInput 
-            style={styles.input}
-            placeholder="Ex: Sala de Estar, Escritório"
-            value={groupName}
-            onChangeText={setGroupName}
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Header
+          title="Criar Novo Grupo"
+          onLogout={() => navigation.navigate('SignIn')}
+          onBack={() => navigation.goBack()}
         />
 
-        <Text style={styles.label}>Dispositivos</Text>
+        <Text style={styles.label}>Nome do Grupo</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: Sala de Estar, Escritório"
+          value={groupName}
+          onChangeText={setGroupName}
+        />
+
+        <Text style={styles.label}>Selecionar Dispositivos</Text>
         <View style={styles.listContainer}>
-            {availableDevices.map(device => (
-                <TouchableOpacity 
-                    key={device.id} 
-                    style={styles.deviceItem}
-                    onPress={() => handleSelectDevice(device.id)}
-                >
-                    <Text style={styles.deviceName}>{device.name}</Text>
-                    
-                    <View style={styles.radioOuter}>
-                        {selectedDevices.includes(device.id) && <View style={styles.radioInner} />}
-                    </View>
-                </TouchableOpacity>
-            ))}
+          {allDevices.length === 0 ? (
+            <Text style={{ color: '#999', fontStyle: 'italic' }}>Nenhum dispositivo disponível para adicionar.</Text>
+          ) : (
+            allDevices.map((device) => (
+              <TouchableOpacity
+                key={device.id}
+                style={[styles.deviceItem, selectedDevices.includes(device.id) && styles.deviceItemSelected]}
+                onPress={() => handleSelectDevice(device.id)}
+              >
+                <Text style={styles.deviceName}>{device.name}</Text>
+
+                <View style={styles.checkboxOuter}>
+                  {selectedDevices.includes(device.id) && <View style={styles.checkboxInner} />}
+                </View>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
 
         <View style={styles.footerButtons}>
-            <TouchableOpacity style={styles.buttonOutline} onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonTextBlack}>Cancelar</Text>
-            </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Button title="Cancelar" variant="outline" onPress={() => navigation.goBack()} />
+          </View>
 
-            <TouchableOpacity style={styles.buttonFilled} onPress={handleCreateGroup}>
-                <Text style={styles.buttonTextWhite}>Criar Grupo</Text>
-            </TouchableOpacity>
+          <View style={{ width: 16 }} />
+
+          <View style={{ flex: 1 }}>
+            <Button
+              title="Criar Grupo"
+              variant="secondary"
+              onPress={handleCreateGroup}
+              icon={<Save size={20} color="#FFF" />}
+            />
+          </View>
         </View>
-
       </ScrollView>
+
+      <AppModal visible={errorModalVisible} onClose={() => setErrorModalVisible(false)} title="Nome Obrigatório">
+        <Text style={styles.modalMessage}>Por favor, insira um nome para o grupo.</Text>
+        <View style={{ width: '100%' }}>
+          <Button title="Ok" variant="secondary" onPress={() => setErrorModalVisible(false)} />
+        </View>
+      </AppModal>
+
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
   );

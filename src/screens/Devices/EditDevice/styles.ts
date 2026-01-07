@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
+    paddingBottom: 100,
   },
 
   label: {
@@ -82,43 +83,18 @@ export const styles = StyleSheet.create({
   footerButtons: {
     gap: 12,
     marginTop: 12,
-    marginBottom: 80,
   },
 
-  buttonSave: {
-    height: 48,
-    borderRadius: 4,
+  modalMessage: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  modalButtonsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.textSecondary,
-  },
-
-  buttonRemove: {
-    height: 48,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.textPrimary,
-  },
-
-  buttonCancel: {
-    height: 48,
-    borderWidth: 1,
-    borderColor: colors.textPrimary,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-  },
-
-  buttonTextWhite: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
-    color: colors.white,
-  },
-  buttonTextDark: {
-    fontFamily: fontFamily.bold,
-    fontSize: 16,
-    color: colors.textPrimary,
   },
 });

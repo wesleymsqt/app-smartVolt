@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Search, Plus, Edit3, X } from 'lucide-react-native';
+import { Search, Plus, Edit3, Trash2 } from 'lucide-react-native';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
+import { AppModal } from '@/components/Modal';
+import { Button } from '@/components/Button';
 
 const initialDevices = [
   { id: '1', name: 'Ar-condicionado', group: 'Sala', consumption: '3.0 kWh', isOn: true },
@@ -20,6 +22,9 @@ export function ManageDevices() {
   const [currentTab, setCurrentTab] = useState<TabTypes>('list');
   const [searchText, setSearchText] = useState('');
   const [devices, setDevices] = useState(initialDevices);
+
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deviceToDelete, setDeviceToDelete] = useState<string | null>(null);
 
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
@@ -42,10 +47,16 @@ export function ManageDevices() {
   };
 
   const confirmRemove = (id: string) => {
-    Alert.alert('Remover Aparelho', 'Tem certeza que deseja remover este aparelho da lista?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Remover', style: 'destructive', onPress: () => handleRemoveDevice(id) },
-    ]);
+    setDeviceToDelete(id);
+    setDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deviceToDelete) {
+      handleRemoveDevice(deviceToDelete);
+    }
+    setDeleteModalVisible(false);
+    setDeviceToDelete(null);
   };
 
   return (
@@ -88,11 +99,6 @@ export function ManageDevices() {
               <Text style={styles.deviceGroup}>{item.group}</Text>
 
               <View style={styles.deviceStatusRow}>
-                {/* <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
-                  <Text style={styles.consumptionText}>{item.consumption}</Text>
-                </View> */}
-
-                {/* Mostra 0 kWh se estiver desligado */}
                 <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
                   <Text style={styles.consumptionText}>{item.isOn ? item.consumption : '0 kWh'}</Text>
                 </View>
@@ -130,12 +136,26 @@ export function ManageDevices() {
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.iconButton} onPress={() => confirmRemove(item.id)}>
-                <X size={18} color={colors.textPrimary} />
+                <Trash2 size={18} color={colors.textPrimary} />
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
+
+      <AppModal visible={deleteModalVisible} onClose={() => setDeleteModalVisible(false)} title="Remover Aparelho">
+        <Text style={{ textAlign: 'center', marginBottom: 24, color: '#666' }}>
+          Tem certeza que deseja remover este aparelho da lista?
+        </Text>
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          <View style={{ flex: 1 }}>
+            <Button title="Cancelar" variant="outline" onPress={() => setDeleteModalVisible(false)} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button title="Remover" variant="secondary" onPress={handleConfirmDelete} />
+          </View>
+        </View>
+      </AppModal>
 
       <BottomMenu activeTab={currentTab} onTabChange={handleTabChange} />
     </SafeAreaView>
