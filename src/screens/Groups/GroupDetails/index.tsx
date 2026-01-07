@@ -83,7 +83,7 @@ export function GroupDetails() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Header title={group.name} onLogout={() => navigation.navigate('SignIn')} />
+        <Header title={group.name} onLogout={() => navigation.navigate('SignIn')} onBack={() => navigation.goBack()} />
 
         <View style={styles.infoContainer}>
           <Text style={styles.infoLabel}>Consumo Total do Grupo:</Text>
