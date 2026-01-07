@@ -86,6 +86,18 @@ export function Personalizations() {
     });
   };
 
+  const handleEditRoutine = (routine: any) => {
+    navigation.navigate('EditRoutine', {
+      routine,
+      onEdit: (updatedRoutine: any) => {
+        setRoutines((prev) => prev.map((r) => (r.id === updatedRoutine.id ? updatedRoutine : r)));
+      },
+      onDelete: (routineId: string) => {
+        setRoutines((prev) => prev.filter((r) => r.id !== routineId));
+      },
+    });
+  };
+
   const toggleRoutine = (id: string) => {
     setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, isOn: !r.isOn } : r)));
   };
@@ -177,10 +189,10 @@ export function Personalizations() {
               <Text style={styles.routineActionLabel}>Ação:</Text>
               <Text style={styles.routineAction}>{item.action}</Text>
 
-              <View style={[styles.cardFooter, { marginTop: 12 }]}>
+              <TouchableOpacity style={[styles.cardFooter, { marginTop: 12 }]} onPress={() => handleEditRoutine(item)}>
                 <Text style={styles.detailsLink}>Editar Rotina</Text>
                 <Edit3 size={16} color={colors.textSecondary} />
-              </View>
+              </TouchableOpacity>
             </View>
           ))}
       </ScrollView>
