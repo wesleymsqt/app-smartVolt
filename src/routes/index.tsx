@@ -7,7 +7,6 @@ import { ManageGroups } from '@/screens/Groups/ManageGroups';
 import { ManageDevices } from '@/screens/ManageDevices';
 import { Personalizations } from '@/screens/Personalizations';
 
-// --- NOVOS IMPORTS ---
 import { GroupDetails } from '@/screens/Groups/GroupDetails';
 import { CreateGroup } from '@/screens/Groups/CreateGroup';
 
@@ -26,10 +25,8 @@ export function Routes() {
         <Stack.Screen name="ManageDevices" component={ManageDevices} />
         <Stack.Screen name="Personalizations" component={Personalizations} />
 
-        {/* --- NOVAS ROTAS ADICIONADAS --- */}
         <Stack.Screen name="GroupDetails" component={GroupDetails} />
         <Stack.Screen name="CreateGroup" component={CreateGroup} />
-        
 
         <Stack.Screen name="AddDevice" component={AddDevice} />
         <Stack.Screen name="EditDevice" component={EditDevice} />
