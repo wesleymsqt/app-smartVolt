@@ -58,6 +58,12 @@ export function Personalizations() {
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
+  const handleCreate = () => {
+    if (activeTab === 'metas') {
+      navigation.navigate('CreateGoal');
+    }
+  };
+
   const toggleRoutine = (id: string) => {
     setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, isOn: !r.isOn } : r)));
   };
@@ -67,7 +73,6 @@ export function Personalizations() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Header title="Personalizações" onLogout={() => navigation.navigate('SignIn')} />
 
-        {/* Abas Superiores */}
         <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={[styles.tabButton, activeTab === 'metas' && styles.activeTabButton]}
@@ -95,7 +100,7 @@ export function Personalizations() {
               onChangeText={setSearchText}
             />
           </View>
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity style={styles.addButton} onPress={handleCreate}>
             <Plus size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
