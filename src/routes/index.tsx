@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SignIn } from '@/screens/SignIn';
-import { Home } from '@/screens/Home';
+import { Home } from '@/screens/Home/ManageHome';
 import { ManageGroups } from '@/screens/Groups/ManageGroups';
 import { ManageDevices } from '@/screens/Devices/ManageDevices';
 import { Personalizations } from '@/screens/Personalizations';
