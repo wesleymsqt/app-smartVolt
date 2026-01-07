@@ -12,28 +12,6 @@ export const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 100,
   },
-  
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  titleContainer: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontFamily: fontFamily.bold,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.textPrimary,
-    width: '100%',
-  },
 
   sectionTitle: {
     fontSize: 16,
@@ -71,7 +49,7 @@ export const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border, 
+    borderColor: colors.border,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
@@ -87,7 +65,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
