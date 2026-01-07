@@ -11,6 +11,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { Routes } from '@/routes';
 import { colors } from '@/theme/colors';
+import { GroupsProvider } from '@/context/GroupsContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -30,8 +31,10 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" backgroundColor="transparent" translucent />
-      <Routes />
+      <GroupsProvider>
+        <StatusBar style="dark" backgroundColor="transparent" translucent />
+        <Routes />
+      </GroupsProvider>
     </SafeAreaProvider>
   );
 }
