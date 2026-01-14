@@ -1,27 +1,66 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Save } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { Button } from '@/components/Button';
 import { AppModal } from '@/components/Modal';
-import { useGroups } from '@/context/GroupsContext';
+
+type Device = {
+  id: number;
+  name: string;
+};
 
 export function CreateGroup() {
   const navigation = useNavigation<any>();
-  const { addGroup, allDevices } = useGroups();
-
   const [groupName, setGroupName] = useState('');
-  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
+  const [selectedDeviceIds, setSelectedDeviceIds] = useState<number[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentTab, setCurrentTab] = useState<TabTypes>('grid');
   const [errorModalVisible, setErrorModalVisible] = useState(false);
 
-  const handleSelectDevice = (id: string) => {
-    setSelectedDevices((prev) => (prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]));
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
+
+  useEffect(() => {
+    async function getToken() {
+      const storedToken = await AsyncStorage.getItem('@storage_Key');
+      setToken(storedToken);
+    }
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    async function fetchDevices() {
+      if (!token) return;
+      try {
+        const response = await fetch(`${apiUrl}/devices`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setDevices(data);
+        } else {
+          Alert.alert('Erro', 'Não foi possível carregar os aparelhos.');
+        }
+      } catch (error) {
+        console.error('Failed to fetch devices:', error);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+    fetchDevices();
+  }, [token]);
+
+  const handleSelectDevice = (id: number) => {
+    setSelectedDeviceIds((prev) => (prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]));
   };
 
   const handleTabChange = (tab: TabTypes) => {
@@ -31,35 +70,38 @@ export function CreateGroup() {
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => {
     if (!groupName.trim()) {
       setErrorModalVisible(true);
       return;
     }
 
-    const devicesToAdd = allDevices
-      .filter((d) => selectedDevices.includes(d.id))
-      .map((d) => ({
-        ...d,
-        isOn: false,
-      }));
+    setIsLoading(true);
 
-    const totalConsumption =
-      devicesToAdd
-        .reduce((sum, dev) => {
-          const value = parseFloat(dev.consumption.replace(/[^0-9.]/g, '')) || 0;
-          return sum + value;
-        }, 0)
-        .toFixed(1) + ' kWh';
+    try {
+      const response = await fetch(`${apiUrl}/groups`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: groupName, device_ids: selectedDeviceIds }),
+      });
 
-    addGroup({
-      name: groupName,
-      connected: `${devicesToAdd.length}/${devicesToAdd.length}`,
-      consumption: totalConsumption,
-      devices: devicesToAdd,
-    });
-
-    navigation.goBack();
+      if (response.ok) {
+        Alert.alert('Sucesso', 'Grupo criado com sucesso!');
+        navigation.goBack();
+      } else {
+        const data = await response.json();
+        Alert.alert('Erro', data.message || 'Não foi possível criar o grupo.');
+      }
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -81,19 +123,19 @@ export function CreateGroup() {
 
         <Text style={styles.label}>Selecionar Dispositivos</Text>
         <View style={styles.listContainer}>
-          {allDevices.length === 0 ? (
+          {devices.length === 0 ? (
             <Text style={{ color: '#999', fontStyle: 'italic' }}>Nenhum dispositivo disponível para adicionar.</Text>
           ) : (
-            allDevices.map((device) => (
+            devices.map((device) => (
               <TouchableOpacity
                 key={device.id}
-                style={[styles.deviceItem, selectedDevices.includes(device.id) && styles.deviceItemSelected]}
+                style={[styles.deviceItem, selectedDeviceIds.includes(device.id) && styles.deviceItemSelected]}
                 onPress={() => handleSelectDevice(device.id)}
               >
                 <Text style={styles.deviceName}>{device.name}</Text>
 
                 <View style={styles.checkboxOuter}>
-                  {selectedDevices.includes(device.id) && <View style={styles.checkboxInner} />}
+                  {selectedDeviceIds.includes(device.id) && <View style={styles.checkboxInner} />}
                 </View>
               </TouchableOpacity>
             ))
@@ -113,6 +155,7 @@ export function CreateGroup() {
               variant="secondary"
               onPress={handleCreateGroup}
               icon={<Save size={20} color="#FFF" />}
+              isLoading={isLoading}
             />
           </View>
         </View>
