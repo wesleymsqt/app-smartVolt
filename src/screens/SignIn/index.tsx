@@ -1,20 +1,47 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Facebook } from 'lucide-react-native';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useState } from 'react';
 
 import { styles } from '@/screens/SignIn/styles';
 import { colors } from '@/theme/colors';
 import { Logo } from '@/components/Logo';
 import { FeatureCarousel } from '@/components/FeatureCarousel';
+import { Button } from '@/components/Button';
 
 export function SignIn() {
   const navigation = useNavigation<any>();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleSignIn() {
-    navigation.navigate('Home');
+  async function handleLogin() {
+    if (!email || !password) {
+      return Alert.alert('Login', 'Preencha todos os campos.');
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Login', 'Email ou senha inválidos.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Login', 'Não foi possível conectar ao servidor.');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -24,27 +51,36 @@ export function SignIn() {
           <View style={styles.header}>
             <View style={styles.titleContainer}>
               <Logo width={100} height={100} color={colors.primary} />
-
-              <Text style={styles.title}>Gerencie Seus Aparelhos{'\n'} na Smart Volt</Text>
-              <Logo width={60} height={32} color={colors.primary} style={{ marginLeft: 16 }} />
+              <Text style={styles.topTitle}>Gerencie Seus Aparelhos </Text>
+              <Text style={styles.title}>no Smart Volt </Text>
             </View>
           </View>
 
           <View style={styles.divider} />
 
           <View style={styles.authContainer}>
-            <Text style={styles.authTitle}>Entrar/Cadastrar-se com</Text>
+            <Text style={styles.authTitle}>Acesse sua conta</Text>
 
-            <View style={styles.socialButtonsContainer}>
-              <TouchableOpacity style={styles.socialButton} onPress={handleSignIn}>
-                <Text style={styles.socialButtonText}>Google</Text>
-                <AntDesign name="google" size={18} color={colors.textPrimary} />
-              </TouchableOpacity>
+            <View style={styles.form}>
+              <TextInput
+                style={styles.input}
+                placeholder="E-mail"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                placeholderTextColor={colors.textSecondary}
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+              />
 
-              <TouchableOpacity style={styles.socialButton} onPress={handleSignIn}>
-                <Text style={styles.socialButtonText}>Facebook</Text>
-                <Facebook size={18} color={colors.textPrimary} />
-              </TouchableOpacity>
+              <Button title="Entrar" onPress={handleLogin} isLoading={isLoading} />
             </View>
           </View>
         </View>

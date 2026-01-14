@@ -10,17 +10,22 @@ export const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 24,
+    paddingHorizontal: 24,
     justifyContent: 'space-between',
   },
   header: {
     marginBottom: 24,
-    marginTop: 15,
   },
   titleContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
   },
+    topTitle: {
+        fontSize: 16,
+        color: colors.textPrimary,
+        lineHeight: 40,
+        textAlign: 'center',
+    },
   title: {
     fontSize: 21,
     fontFamily: fontFamily.bold,
@@ -49,25 +54,19 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.textPrimary,
   },
-  socialButtonsContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    justifyContent: 'space-between',
+  form: {
+    width: '100%',
   },
-  socialButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  input: {
+    height: 56,
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingVertical: 10,
-    borderRadius: 4,
-    gap: 8,
-  },
-  socialButtonText: {
-    fontSize: 14,
-    fontFamily: fontFamily.medium,
+    marginBottom: 16,
+    fontSize: 16,
+    fontFamily: fontFamily.regular,
     color: colors.textPrimary,
   },
 });
