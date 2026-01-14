@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Camera, Save } from 'lucide-react-native';
+import { Save } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { Button } from '@/components/Button';
 import { AppModal } from '@/components/Modal';
-import { colors } from '@/theme/colors';
+
+type Group = {
+  id: number;
+  name: string;
+};
 
 export function AddDevice() {
   const navigation = useNavigation<any>();
@@ -19,12 +24,48 @@ export function AddDevice() {
 
   const [currentTab, setCurrentTab] = useState<TabTypes>('list');
   const [name, setName] = useState('');
-  const [consumption, setConsumption] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState<string>('Nenhum');
+  const [key, setKey] = useState('');
+  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const [errorModalVisible, setErrorModalVisible] = useState(false);
 
-  const groups = ['Cozinha', 'Quarto', 'Nenhum'];
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
+
+  useEffect(() => {
+    async function getToken() {
+      const storedToken = await AsyncStorage.getItem('@storage_Key');
+      setToken(storedToken);
+    }
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    async function fetchGroups() {
+      if (!token) return;
+      try {
+        const response = await fetch(`${apiUrl}/groups`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        console.log('API response data:', data);
+        if (response.ok) {
+          setGroups(data);
+        } else {
+          Alert.alert('Erro', 'Não foi possível carregar os grupos.');
+        }
+      } catch (error) {
+        console.error('Failed to fetch groups:', error);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+
+    fetchGroups();
+  }, [token]);
 
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
@@ -38,26 +79,38 @@ export function AddDevice() {
     navigation.goBack();
   };
 
-  const handleSave = () => {
-    if (!name.trim()) {
+  const handleSave = async () => {
+    if (!key.trim() || !name.trim()) {
       setErrorModalVisible(true);
       return;
     }
 
-    const finalConsumption = consumption.trim() ? `${consumption} kWh` : '0.0 kWh';
+    setIsLoading(true);
 
-    if (onAdd) {
-      const newDevice = {
-        id: String(new Date().getTime()),
-        name,
-        group: selectedGroup,
-        consumption: finalConsumption,
-        isOn: false,
-      };
-      onAdd(newDevice);
+    try {
+      const response = await fetch(`${apiUrl}/devices/link`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ key, name, group_id: selectedGroupId }),
+      });
+
+      if (response.ok) {
+        Alert.alert('Sucesso', 'Aparelho vinculado com sucesso!');
+        navigation.goBack();
+      } else {
+        const data = await response.json();
+        Alert.alert('Erro', data.message || 'Não foi possível vincular o aparelho.');
+      }
+    } catch (error) {
+      console.error('Failed to link device:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    } finally {
+      setIsLoading(false);
     }
-
-    navigation.goBack();
   };
 
   return (
@@ -73,11 +126,14 @@ export function AddDevice() {
           onBack={() => navigation.goBack()}
         />
 
-        <Text style={styles.label}>Leitura do QR Code</Text>
-        <TouchableOpacity style={styles.qrButton} activeOpacity={0.7}>
-          <Text style={styles.qrText}>Toque para escanear</Text>
-          <Camera color={colors.textPrimary} size={20} />
-        </TouchableOpacity>
+        <Text style={styles.label}>Identificador do Aparelho</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: ANCDTE12341"
+          placeholderTextColor="#9CA3AF"
+          value={key}
+          onChangeText={setKey}
+        />
 
         <Text style={styles.label}>Nome do Aparelho</Text>
         <TextInput
@@ -88,26 +144,22 @@ export function AddDevice() {
           onChangeText={setName}
         />
 
-        <Text style={styles.label}>Consumo Médio (kWh)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ex: 0.8"
-          placeholderTextColor="#9CA3AF"
-          value={consumption}
-          onChangeText={setConsumption}
-          keyboardType="numeric"
-        />
-
         <Text style={styles.label}>Adicionar ao Grupo</Text>
         <View style={styles.groupContainer}>
           <TextInput style={styles.searchGroupInput} placeholder="Pesquisar grupo" placeholderTextColor="#9CA3AF" />
 
           {groups.map((group) => (
-            <TouchableOpacity key={group} style={styles.radioRow} onPress={() => setSelectedGroup(group)}>
-              <Text style={styles.radioLabel}>{group}</Text>
-              <View style={styles.radioButton}>{selectedGroup === group && <View style={styles.radioSelected} />}</View>
+            <TouchableOpacity key={group.id} style={styles.radioRow} onPress={() => setSelectedGroupId(group.id)}>
+              <Text style={styles.radioLabel}>{group.name}</Text>
+              <View style={styles.radioButton}>
+                {selectedGroupId === group.id && <View style={styles.radioSelected} />}
+              </View>
             </TouchableOpacity>
           ))}
+          <TouchableOpacity style={styles.radioRow} onPress={() => setSelectedGroupId(null)}>
+            <Text style={styles.radioLabel}>Nenhum</Text>
+            <View style={styles.radioButton}>{selectedGroupId === null && <View style={styles.radioSelected} />}</View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.footerButtons}>
@@ -118,13 +170,19 @@ export function AddDevice() {
           <View style={{ width: 16 }} />
 
           <View style={{ flex: 1 }}>
-            <Button title="Salvar" variant="secondary" onPress={handleSave} icon={<Save size={20} color="#FFF" />} />
+            <Button
+              title="Salvar"
+              variant="secondary"
+              onPress={handleSave}
+              icon={<Save size={20} color="#FFF" />}
+              isLoading={isLoading}
+            />
           </View>
         </View>
       </ScrollView>
 
       <AppModal visible={errorModalVisible} onClose={() => setErrorModalVisible(false)} title="Dados Incompletos">
-        <Text style={styles.modalMessage}>Por favor, informe o nome do aparelho para continuar.</Text>
+        <Text style={styles.modalMessage}>Por favor, informe o identificador e o nome do aparelho para continuar.</Text>
         <View style={{ width: '100%' }}>
           <Button title="Entendi" variant="secondary" onPress={() => setErrorModalVisible(false)} />
         </View>

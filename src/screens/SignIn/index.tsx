@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TextInput, Alert, Platform } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from '@/screens/SignIn/styles';
 import { colors } from '@/theme/colors';
@@ -17,7 +18,6 @@ export function SignIn() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const [token, setToken] = useState<string | null>(null);
 
   const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
 
@@ -41,8 +41,8 @@ export function SignIn() {
       const data = await response.json();
 
       if (response.ok) {
-        setToken(data.access_token);
-        console.log('Login successful, token:', data.access_token);
+        await AsyncStorage.setItem('@storage_Key', data.access_token);
+        console.log('Login successful, token saved:', data.access_token);
         navigation.navigate('Home');
       } else {
         Alert.alert('Login', data.message || 'Email ou senha inválidos.');
