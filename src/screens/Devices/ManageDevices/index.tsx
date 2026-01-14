@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Search, Plus, Edit3, Trash2 } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
@@ -11,20 +12,76 @@ import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { AppModal } from '@/components/Modal';
 import { Button } from '@/components/Button';
 
-const initialDevices = [
-  { id: '1', name: 'Ar-condicionado', group: 'Sala', consumption: '3.0 kWh', isOn: true },
-  { id: '2', name: 'Lampada', group: 'Cozinha', consumption: '0.8 kWh', isOn: false },
-  { id: '3', name: 'Ar-condicionado', group: 'Quarto', consumption: '3.0 kWh', isOn: true },
-];
+type Device = {
+  id: number;
+  name: string;
+  group_id: number;
+  is_on: number;
+  consumption: number | null;
+};
+
+type Group = {
+  id: number;
+  name: string;
+};
 
 export function ManageDevices() {
   const navigation = useNavigation<any>();
   const [currentTab, setCurrentTab] = useState<TabTypes>('list');
   const [searchText, setSearchText] = useState('');
-  const [devices, setDevices] = useState(initialDevices);
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [token, setToken] = useState<string | null>(null);
 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [deviceToDelete, setDeviceToDelete] = useState<string | null>(null);
+  const [deviceToDelete, setDeviceToDelete] = useState<number | null>(null);
+
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
+
+  useEffect(() => {
+    async function getToken() {
+      const storedToken = await AsyncStorage.getItem('@storage_Key');
+      setToken(storedToken);
+    }
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!token) return;
+      try {
+        const [devicesResponse, groupsResponse] = await Promise.all([
+          fetch(`${apiUrl}/devices`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${apiUrl}/groups`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+
+        const devicesData = await devicesResponse.json();
+        const groupsData = await groupsResponse.json();
+
+        if (devicesResponse.ok) {
+          setDevices(devicesData);
+        } else {
+          Alert.alert('Erro', 'Não foi possível carregar os aparelhos.');
+        }
+
+        if (groupsResponse.ok) {
+          setGroups(groupsData);
+        } else {
+          Alert.alert('Erro', 'Não foi possível carregar os grupos.');
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+
+    fetchData();
+  }, [token]);
+
+  const getGroupName = (groupId: number) => {
+    const group = groups.find((g) => g.id === groupId);
+    return group ? group.name : 'Sem grupo';
+  };
 
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
@@ -38,15 +95,17 @@ export function ManageDevices() {
     navigation.navigate('SignIn');
   };
 
-  const toggleSwitch = (id: string) => {
-    setDevices((prev) => prev.map((device) => (device.id === id ? { ...device, isOn: !device.isOn } : device)));
+  const toggleSwitch = (id: number) => {
+    setDevices((prev) =>
+      prev.map((device) => (device.id === id ? { ...device, is_on: device.is_on === 1 ? 0 : 1 } : device)),
+    );
   };
 
-  const handleRemoveDevice = (id: string) => {
+  const handleRemoveDevice = (id: number) => {
     setDevices((prev) => prev.filter((device) => device.id !== id));
   };
 
-  const confirmRemove = (id: string) => {
+  const confirmRemove = (id: number) => {
     setDeviceToDelete(id);
     setDeleteModalVisible(true);
   };
@@ -96,23 +155,23 @@ export function ManageDevices() {
           <View key={item.id} style={styles.card}>
             <View style={styles.cardLeftContent}>
               <Text style={styles.deviceName}>{item.name}</Text>
-              <Text style={styles.deviceGroup}>{item.group}</Text>
+              <Text style={styles.deviceGroup}>{getGroupName(item.group_id)}</Text>
 
               <View style={styles.deviceStatusRow}>
-                <View style={[styles.consumptionBadge, { opacity: item.isOn ? 1 : 0.5 }]}>
-                  <Text style={styles.consumptionText}>{item.isOn ? item.consumption : '0 kWh'}</Text>
+                <View style={[styles.consumptionBadge, { opacity: item.is_on ? 1 : 0.5 }]}>
+                  <Text style={styles.consumptionText}>{item.is_on ? `${item.consumption || 0} kWh` : '0 kWh'}</Text>
                 </View>
 
                 <View style={styles.switchWrapper}>
-                  <Text style={[styles.statusLabel, { color: item.isOn ? colors.textPrimary : colors.borderMuted }]}>
-                    {item.isOn ? 'ON' : 'OFF'}
+                  <Text style={[styles.statusLabel, { color: item.is_on ? colors.textPrimary : colors.borderMuted }]}>
+                    {item.is_on ? 'ON' : 'OFF'}
                   </Text>
 
                   <Switch
                     trackColor={{ false: colors.borderMuted, true: colors.textPrimary }}
-                    thumbColor={item.isOn ? colors.surface : colors.textPrimary}
+                    thumbColor={item.is_on ? colors.surface : colors.textPrimary}
                     onValueChange={() => toggleSwitch(item.id)}
-                    value={item.isOn}
+                    value={!!item.is_on}
                     style={{ transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }] }}
                   />
                 </View>
@@ -128,7 +187,7 @@ export function ManageDevices() {
                     onEdit: (updatedDevice: any) => {
                       setDevices((prev) => prev.map((d) => (d.id === updatedDevice.id ? updatedDevice : d)));
                     },
-                    onDelete: (id: string) => handleRemoveDevice(id),
+                    onDelete: (id: number) => handleRemoveDevice(id),
                   })
                 }
               >
