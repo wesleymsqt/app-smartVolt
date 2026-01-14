@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Search, Plus, Edit3, Trash2 } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,6 +38,34 @@ export function ManageDevices() {
 
   const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
 
+  const fetchData = useCallback(async () => {
+    if (!token) return;
+    try {
+      const [devicesResponse, groupsResponse] = await Promise.all([
+        fetch(`${apiUrl}/devices`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${apiUrl}/groups`, { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
+
+      const devicesData = await devicesResponse.json();
+      const groupsData = await groupsResponse.json();
+
+      if (devicesResponse.ok) {
+        setDevices(devicesData);
+      } else {
+        Alert.alert('Erro', 'Não foi possível carregar os aparelhos.');
+      }
+
+      if (groupsResponse.ok) {
+        setGroups(groupsData);
+      } else {
+        Alert.alert('Erro', 'Não foi possível carregar os grupos.');
+      }
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    }
+  }, [token, apiUrl]);
+
   useEffect(() => {
     async function getToken() {
       const storedToken = await AsyncStorage.getItem('@storage_Key');
@@ -46,37 +74,11 @@ export function ManageDevices() {
     getToken();
   }, []);
 
-  useEffect(() => {
-    async function fetchData() {
-      if (!token) return;
-      try {
-        const [devicesResponse, groupsResponse] = await Promise.all([
-          fetch(`${apiUrl}/devices`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`${apiUrl}/groups`, { headers: { Authorization: `Bearer ${token}` } }),
-        ]);
-
-        const devicesData = await devicesResponse.json();
-        const groupsData = await groupsResponse.json();
-
-        if (devicesResponse.ok) {
-          setDevices(devicesData);
-        } else {
-          Alert.alert('Erro', 'Não foi possível carregar os aparelhos.');
-        }
-
-        if (groupsResponse.ok) {
-          setGroups(groupsData);
-        } else {
-          Alert.alert('Erro', 'Não foi possível carregar os grupos.');
-        }
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
-      }
-    }
-
-    fetchData();
-  }, [token]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData]),
+  );
 
   const getGroupName = (groupId: number) => {
     const group = groups.find((g) => g.id === groupId);
@@ -110,9 +112,27 @@ export function ManageDevices() {
     setDeleteModalVisible(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deviceToDelete) {
-      handleRemoveDevice(deviceToDelete);
+      try {
+        const response = await fetch(`${apiUrl}/devices/${deviceToDelete}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          Alert.alert('Sucesso', 'Aparelho removido com sucesso!');
+          fetchData();
+        } else {
+          const data = await response.json();
+          Alert.alert('Erro', data.message || 'Não foi possível remover o aparelho.');
+        }
+      } catch (error) {
+        console.error('Failed to delete device:', error);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+      }
     }
     setDeleteModalVisible(false);
     setDeviceToDelete(null);
