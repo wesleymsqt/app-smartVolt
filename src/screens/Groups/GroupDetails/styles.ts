@@ -123,5 +123,26 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#F3F4F6',
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  deviceItemSelected: {
+    backgroundColor: '#F3F4F6',
+  },
+  checkboxOuter: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: colors.textPrimary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxInner: {
+    width: 12,
+    height: 12,
+    backgroundColor: colors.textPrimary,
+    borderRadius: 2,
   },
 });
