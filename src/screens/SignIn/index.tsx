@@ -11,12 +11,15 @@ import { Button } from '@/components/Button';
 
 export function SignIn() {
   const navigation = useNavigation<any>();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [token, setToken] = useState<string | null>(null);
 
-  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api/login' : 'http://localhost:8000/api/login';
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
 
   async function handleLogin() {
     if (!email || !password) {
@@ -26,7 +29,7 @@ export function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,6 +55,43 @@ export function SignIn() {
     }
   }
 
+  async function handleRegister() {
+    if (!name || !email || !password || !passwordConfirmation) {
+      return Alert.alert('Cadastro', 'Preencha todos os campos.');
+    }
+
+    if (password !== passwordConfirmation) {
+      return Alert.alert('Cadastro', 'As senhas não conferem.');
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ name, email, password, password_confirmation: passwordConfirmation }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert('Cadastro', 'Cadastro realizado com sucesso! Faça o login para continuar.');
+        setIsLogin(true);
+      } else {
+        Alert.alert('Cadastro', data.message || 'Não foi possível realizar o cadastro.');
+      }
+    } catch (error) {
+      console.error('Registration failed:', error);
+      Alert.alert('Cadastro', 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -67,9 +107,19 @@ export function SignIn() {
           <View style={styles.divider} />
 
           <View style={styles.authContainer}>
-            <Text style={styles.authTitle}>Acesse sua conta</Text>
+            <Text style={styles.authTitle}>{isLogin ? 'Acesse sua conta' : 'Crie sua conta'}</Text>
 
             <View style={styles.form}>
+              {!isLogin && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Nome"
+                  placeholderTextColor={colors.textSecondary}
+                  autoCapitalize="words"
+                  value={name}
+                  onChangeText={setName}
+                />
+              )}
               <TextInput
                 style={styles.input}
                 placeholder="E-mail"
@@ -87,8 +137,28 @@ export function SignIn() {
                 value={password}
                 onChangeText={setPassword}
               />
+              {!isLogin && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirme sua senha"
+                  placeholderTextColor={colors.textSecondary}
+                  secureTextEntry
+                  value={passwordConfirmation}
+                  onChangeText={setPasswordConfirmation}
+                />
+              )}
 
-              <Button title="Entrar" onPress={handleLogin} isLoading={isLoading} />
+              <Button
+                title={isLogin ? 'Entrar' : 'Cadastrar'}
+                onPress={isLogin ? handleLogin : handleRegister}
+                isLoading={isLoading}
+              />
+              <Button
+                title={isLogin ? 'Criar uma conta' : 'Já tenho uma conta'}
+                onPress={() => setIsLogin(!isLogin)}
+                variant="outline"
+                style={{ marginTop: 12 }}
+              />
             </View>
           </View>
         </View>

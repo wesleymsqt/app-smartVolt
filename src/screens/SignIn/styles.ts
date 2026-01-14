@@ -20,12 +20,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-    topTitle: {
-        fontSize: 16,
-        color: colors.textPrimary,
-        lineHeight: 40,
-        textAlign: 'center',
-    },
+  topTitle: {
+    fontSize: 16,
+    color: colors.textPrimary,
+    lineHeight: 40,
+    textAlign: 'center',
+  },
   title: {
     fontSize: 21,
     fontFamily: fontFamily.bold,
