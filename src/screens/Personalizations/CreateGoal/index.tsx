@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Save, Target, Zap, Armchair } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { Header } from '@/components/Header';
@@ -10,6 +11,12 @@ import { Button } from '@/components/Button';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
 import { AppModal } from '@/components/Modal';
 import { colors } from '@/theme/colors';
+
+type Group = {
+  id: number;
+  name: string;
+  selected: boolean;
+};
 
 export function CreateGoal() {
   const navigation = useNavigation<any>();
@@ -23,16 +30,48 @@ export function CreateGoal() {
   const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
   const [notification, setNotification] = useState<boolean>(true);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [groups, setGroups] = useState([
-    { id: '1', name: 'Geral (Casa toda)', selected: true },
-    { id: '2', name: 'Cozinha', selected: false },
-    { id: '3', name: 'Quarto', selected: false },
-    { id: '4', name: 'Sala de Estar', selected: false },
-    { id: '5', name: 'Escritório', selected: false },
-  ]);
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
 
-  const toggleGroup = (id: string) => {
+  useEffect(() => {
+    async function getToken() {
+      const storedToken = await AsyncStorage.getItem('@storage_Key');
+      setToken(storedToken);
+    }
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    async function fetchGroups() {
+      if (!token) return;
+      try {
+        const response = await fetch(`${apiUrl}/groups`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setGroups([
+            { id: 0, name: 'Geral (Casa toda)', selected: true },
+            ...data.map((group: Group) => ({ ...group, selected: false })),
+          ]);
+        } else {
+          Alert.alert('Erro', 'Não foi possível carregar os grupos.');
+        }
+      } catch (error) {
+        console.error('Failed to fetch groups:', error);
+        Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+      }
+    }
+
+    fetchGroups();
+  }, [token]);
+
+  const toggleGroup = (id: number) => {
     setGroups((prev) =>
       prev.map((group) => ({
         ...group,
@@ -49,27 +88,58 @@ export function CreateGoal() {
     if (tab === 'menu') navigation.navigate('Personalizations');
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim() || !limit.trim()) {
       setErrorModalVisible(true);
       return;
     }
 
-    if (onSave) {
-      const selectedGroup = groups.find((g) => g.selected)?.name || 'Geral';
+    const selectedGroup = groups.find((g) => g.selected);
 
-      const newGoal = {
-        id: new Date().getTime().toString(),
-        name,
-        value: `${limit} kWh`,
-        label: period === 'monthly' ? 'Consumo mensal' : period === 'weekly' ? 'Consumo semanal' : 'Consumo diário',
-        alert: notification,
-      };
-
-      onSave(newGoal);
+    if (!selectedGroup) {
+      Alert.alert('Erro', 'Selecione um ambiente para a meta.');
+      return;
     }
 
-    navigation.goBack();
+    setIsLoading(true);
+
+    try {
+      let endpoint = '';
+      let body: any = {
+        name,
+        target_kwh: parseFloat(limit),
+        period,
+      };
+
+      if (selectedGroup.id === 0) {
+        endpoint = `${apiUrl}/user/usage-goal`;
+      } else {
+        endpoint = `${apiUrl}/groups/${selectedGroup.id}/usage-goal`;
+      }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        Alert.alert('Sucesso', 'Meta criada com sucesso!');
+        navigation.goBack();
+      } else {
+        const data = await response.json();
+        Alert.alert('Erro', data.message || 'Não foi possível criar a meta.');
+      }
+    } catch (error) {
+      console.error('Failed to create goal:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -162,7 +232,13 @@ export function CreateGoal() {
         </View>
 
         <View style={styles.footerButtons}>
-          <Button title="Salvar Meta" variant="secondary" onPress={handleSave} icon={<Save size={20} color="#FFF" />} />
+          <Button
+            title="Salvar Meta"
+            variant="secondary"
+            onPress={handleSave}
+            icon={<Save size={20} color="#FFF" />}
+            isLoading={isLoading}
+          />
         </View>
       </ScrollView>
 
