@@ -24,7 +24,7 @@ type Meta = {
   updated_at: string | null;
 };
 
-type InternalTab = 'metas' | 'rotinas';
+type InternalTab = 'metas';
 
 export function Personalizations() {
   const navigation = useNavigation<any>();
@@ -67,35 +67,8 @@ export function Personalizations() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [fetchData])
+    }, [fetchData]),
   );
-
-  const [routines, setRoutines] = useState([
-    {
-      id: '1',
-      name: 'Modo Cinema',
-      time: '20:00 - 00:00',
-      days: 'Sex, Sáb, Dom',
-      action: 'Liga TV + Ar Condicionado',
-      isOn: true,
-    },
-    {
-      id: '2',
-      name: 'Despertar',
-      time: '06:00 - 06:15',
-      days: 'Seg, Ter, Qua, Qui, Sex',
-      action: 'Liga Luz Quarto (Suave)',
-      isOn: false,
-    },
-    {
-      id: '3',
-      name: 'Economia',
-      time: '09:00 - 18:00',
-      days: 'Todos os dias',
-      action: 'Desliga Ar-condicionados',
-      isOn: true,
-    },
-  ]);
 
   const handleBottomTabChange = (tab: TabTypes) => {
     setCurrentMenuTab(tab);
@@ -110,12 +83,6 @@ export function Personalizations() {
       navigation.navigate('CreateGoal', {
         onSave: (newGoal: any) => {
           setMetas((prev) => [...prev, newGoal]);
-        },
-      });
-    } else if (activeTab === 'rotinas') {
-      navigation.navigate('CreateRoutine', {
-        onSave: (newRoutine: any) => {
-          setRoutines((prev) => [...prev, newRoutine]);
         },
       });
     }
@@ -133,24 +100,7 @@ export function Personalizations() {
     });
   };
 
-  const handleEditRoutine = (routine: any) => {
-    navigation.navigate('EditRoutine', {
-      routine,
-      onEdit: (updatedRoutine: any) => {
-        setRoutines((prev) => prev.map((r) => (r.id === updatedRoutine.id ? updatedRoutine : r)));
-      },
-      onDelete: (routineId: string) => {
-        setRoutines((prev) => prev.filter((r) => r.id !== routineId));
-      },
-    });
-  };
-
-  const toggleRoutine = (id: string) => {
-    setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, isOn: !r.isOn } : r)));
-  };
-
   const filteredMetas = metas.filter((m) => m.name.toLowerCase().includes(searchText.toLowerCase()));
-  const filteredRoutines = routines.filter((r) => r.name.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -163,13 +113,6 @@ export function Personalizations() {
             onPress={() => setActiveTab('metas')}
           >
             <Text style={[styles.tabText, activeTab === 'metas' && styles.activeTabText]}>Metas</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.tabButton, activeTab === 'rotinas' && styles.activeTabButton]}
-            onPress={() => setActiveTab('rotinas')}
-          >
-            <Text style={[styles.tabText, activeTab === 'rotinas' && styles.activeTabText]}>Rotinas</Text>
           </TouchableOpacity>
         </View>
 
@@ -204,40 +147,20 @@ export function Personalizations() {
               </View>
 
               <View style={styles.metaContent}>
-                <Text style={styles.metaValue}>{item.current_consumption} / {item.target_kwh} kWh</Text>
-                <Text style={styles.metaLabel}>{item.period === 'daily' ? 'Consumo diário' : item.period === 'weekly' ? 'Consumo semanal' : 'Consumo mensal'}</Text>
+                <Text style={styles.metaValue}>
+                  {item.current_consumption} / {item.target_kwh} kWh
+                </Text>
+                <Text style={styles.metaLabel}>
+                  {item.period === 'daily'
+                    ? 'Consumo diário'
+                    : item.period === 'weekly'
+                      ? 'Consumo semanal'
+                      : 'Consumo mensal'}
+                </Text>
               </View>
 
               <TouchableOpacity style={styles.cardFooter} onPress={() => handleEdit(item)}>
                 <Text style={styles.detailsLink}>Editar Meta</Text>
-                <Edit3 size={16} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-          ))}
-
-        {activeTab === 'rotinas' &&
-          filteredRoutines.map((item) => (
-            <View key={item.id} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>{item.name}</Text>
-                <Switch
-                  trackColor={{ false: colors.borderMuted, true: colors.textSecondary }}
-                  thumbColor={colors.surface}
-                  onValueChange={() => toggleRoutine(item.id)}
-                  value={item.isOn}
-                />
-              </View>
-
-              <Text style={styles.routineTime}>{item.time}</Text>
-              <Text style={styles.routineDays}>{item.days}</Text>
-
-              <View style={styles.divider} />
-
-              <Text style={styles.routineActionLabel}>Ação:</Text>
-              <Text style={styles.routineAction}>{item.action}</Text>
-
-              <TouchableOpacity style={[styles.cardFooter, { marginTop: 12 }]} onPress={() => handleEditRoutine(item)}>
-                <Text style={styles.detailsLink}>Editar Rotina</Text>
                 <Edit3 size={16} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>

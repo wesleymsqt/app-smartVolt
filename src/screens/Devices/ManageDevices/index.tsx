@@ -97,10 +97,26 @@ export function ManageDevices() {
     navigation.navigate('SignIn');
   };
 
-  const toggleSwitch = (id: number) => {
-    setDevices((prev) =>
-      prev.map((device) => (device.id === id ? { ...device, is_on: device.is_on === 1 ? 0 : 1 } : device)),
-    );
+  const toggleSwitch = async (id: number) => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${apiUrl}/devices/${id}/toggle`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        fetchData();
+      } else {
+        const data = await response.json();
+        Alert.alert('Erro', data.message || 'Não foi possível alternar o status do aparelho.');
+      }
+    } catch (error) {
+      console.error('Failed to toggle device:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    }
   };
 
   const handleRemoveDevice = (id: number) => {

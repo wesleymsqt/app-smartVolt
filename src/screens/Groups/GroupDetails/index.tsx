@@ -188,8 +188,26 @@ export function GroupDetails() {
     setSelectedDeviceIds((prev) => (prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id]));
   };
 
-  const toggleSwitch = (deviceId: number) => {
-    // Implement toggle switch logic here
+  const toggleSwitch = async (deviceId: number) => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${apiUrl}/devices/${deviceId}/toggle`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        fetchData();
+      } else {
+        const data = await response.json();
+        Alert.alert('Erro', data.message || 'Não foi possível alternar o status do aparelho.');
+      }
+    } catch (error) {
+      console.error('Failed to toggle device:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    }
   };
 
   return (
