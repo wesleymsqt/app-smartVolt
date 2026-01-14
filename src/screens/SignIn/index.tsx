@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, TextInput, Alert, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
@@ -14,6 +14,9 @@ export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api/login' : 'http://localhost:8000/api/login';
 
   async function handleLogin() {
     if (!email || !password) {
@@ -23,22 +26,27 @@ export function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        setToken(data.access_token);
+        console.log('Login successful, token:', data.access_token);
         navigation.navigate('Home');
       } else {
-        Alert.alert('Login', 'Email ou senha inválidos.');
+        Alert.alert('Login', data.message || 'Email ou senha inválidos.');
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert('Login', 'Não foi possível conectar ao servidor.');
+      console.error('Login failed:', error);
+      Alert.alert('Login', 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.');
     } finally {
       setIsLoading(false);
     }
