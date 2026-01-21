@@ -1,21 +1,68 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Search, Plus, ChevronRight } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { colors } from '@/theme/colors';
 import { Header } from '@/components/Header';
 import { BottomMenu, TabTypes } from '@/components/BottomMenu';
-import { useGroups } from '@/context/GroupsContext';
-import type { Group } from '@/context/GroupsContext';
+
+type Group = {
+  id: number;
+  name: string;
+  user_id: number;
+  created_at: string | null;
+  updated_at: string | null;
+  devices_count: number;
+  devices_on_count: number;
+  total_consumption: number | null;
+};
 
 export function ManageGroups() {
   const navigation = useNavigation<any>();
-  const { groups } = useGroups();
+  const [groups, setGroups] = useState<Group[]>([]);
   const [currentTab, setCurrentTab] = useState<TabTypes>('grid');
   const [searchText, setSearchText] = useState('');
+  const [token, setToken] = useState<string | null>(null);
+
+  const apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000/api' : 'http://localhost:8000/api';
+
+  useEffect(() => {
+    async function getToken() {
+      const storedToken = await AsyncStorage.getItem('@storage_Key');
+      setToken(storedToken);
+    }
+    getToken();
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${apiUrl}/groups`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setGroups(data);
+      } else {
+        Alert.alert('Erro', 'Não foi possível carregar os grupos.');
+      }
+    } catch (error) {
+      console.error('Failed to fetch groups:', error);
+      Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
+    }
+  }, [token, apiUrl]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData]),
+  );
 
   const handleTabChange = (tab: TabTypes) => {
     setCurrentTab(tab);
@@ -30,16 +77,9 @@ export function ManageGroups() {
   };
 
   const getGroupStats = (group: Group) => {
-    const devices = group.devices || [];
-    const totalCount = devices.length;
-    const activeCount = devices.filter((d) => d.isOn).length;
-
-    const totalConsumption = devices
-      .filter((d) => d.isOn)
-      .reduce((acc, d) => {
-        const value = parseFloat(d.consumption.replace(/[^0-9.]/g, '')) || 0;
-        return acc + value;
-      }, 0);
+    const totalCount = group.devices_count;
+    const activeCount = group.devices_on_count;
+    const totalConsumption = group.total_consumption || 0;
 
     return {
       statusText: `${activeCount}/${totalCount} Aparelhos Ligados`,
@@ -78,7 +118,11 @@ export function ManageGroups() {
           const stats = getGroupStats(group);
 
           return (
-            <TouchableOpacity key={group.id} style={styles.card} onPress={() => handleGroupDetails(group.id)}>
+            <TouchableOpacity
+              key={group.id}
+              style={styles.card}
+              onPress={() => handleGroupDetails(group.id.toString())}
+            >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.groupName}>{group.name}</Text>
